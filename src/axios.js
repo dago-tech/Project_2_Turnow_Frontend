@@ -4,17 +4,17 @@ const baseURL = 'http://127.0.0.1:8000/api/';
 
 const api = axios.create({
 	baseURL: baseURL,
-	// timeout: 5000,
-	// headers: {
-	// 	Authorization: localStorage.getItem('access_token')
-	// 		? 'JWT ' + localStorage.getItem('access_token')
-	// 		: null,
-	// 	'Content-Type': 'multipart/form-data',
-	// 	//'Content-Type': 'application/json',
+	timeout: 5000,
+	headers: {
+		// Authorization: localStorage.getItem('access_token')
+		// 	? 'JWT ' + localStorage.getItem('access_token')
+		// 	: null,
+		//'Content-Type': 'multipart/form-data',
+		'Content-Type': 'application/json',
 		
-	// 	accept: 'application/json',
-	// 	//accept: '*/*',
-	// }, 
+		accept: 'application/json',
+		//accept: '*/*',
+	}, 
 });
 
 // Función para realizar una solicitud GET
@@ -23,7 +23,7 @@ export const getData = async (endpoint) => {
 		const response = await api.get(endpoint);
 		return response.data;
 	} catch (error) {
-		console.error('Error en la solicitud GET:', error);
+		console.error('Error in GET request:', error);
 		throw error;
 	}
 };
@@ -34,7 +34,7 @@ export const postData = async (endpoint, data) => {
 		const response = await api.post(endpoint, data);
 		return response.data;
 	} catch (error) {
-		console.error('Error en la solicitud POST:', error);
+		console.error('Error in POST request:', error);
 		throw error;
 	}
 };

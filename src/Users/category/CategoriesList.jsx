@@ -1,5 +1,4 @@
-import { ItemsList } from "../../components/ItemsList";
-import Categories from "./Categories";
+import ItemsCrud from "../../components/ItemsCrud";
 
 export function CategoriesList() {
     //const [count, setCount] = useState(0)
@@ -7,9 +6,12 @@ export function CategoriesList() {
     return (
         <>            
             <h1>List of categories component</h1>
-            <ItemsList
+            {/* <ItemsList
                 endpoint="category/"
                 component = {Categories}
+            /> */}
+            <ItemsCrud
+                endpoint="category/"
             />
         </>
     )

@@ -5,6 +5,8 @@ import { CategoriesList } from "./category/CategoriesList";
 import { PrioritiesList } from "./priority/PrioritiesList";
 import { DesksList } from "./desk/DesksList";
 import { TurnList } from "./turn/TurnList";
+import { CategoriesEdit } from "./category/CategoriesEdit";
+import { CategoriesCreate } from "./category/CategoriesCreate";
 
 export function AdminMain() {
     //const [count, setCount] = useState(0)
@@ -33,6 +35,8 @@ export function AdminMain() {
                     <Routes>                    
                         <Route path="/users" element={<UsersList />} />
                         <Route path="/categories" element={<CategoriesList />} />
+                        <Route exact path="/categories/edit/:id" element={<CategoriesEdit/>} />
+                        <Route exact path="/categories/create" element={<CategoriesCreate/>} />
                         <Route path="/priorities" element={<PrioritiesList />} />
                         <Route path="/desks" element={<DesksList />} />
                         <Route path="/turns" element={<TurnList />} />

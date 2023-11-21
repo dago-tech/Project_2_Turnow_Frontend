@@ -3,7 +3,6 @@ import Items from './Items';
 import ItemLoading from './ItemLoading';
 
 export function ItemsList(props) {
-    //const [count, setCount] = useState(0)
     
     const ItemLoadingComponent = ItemLoading(props.component);
     const [appState, setAppState] = useState({
@@ -22,10 +21,8 @@ export function ItemsList(props) {
 	}, [setAppState]);
 
     return (
-        <>
-            <div className="App">
-                <ItemLoadingComponent isLoading={appState.loading} items={appState.items} />
-            </div>
-        </>
+        <div className="App">
+            <ItemLoadingComponent isLoading={appState.loading} items={appState.items} />
+        </div>
     )
 }
