@@ -1,18 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ItemsTableRow = ({ el, deleteData}) => {
-    let { name, id } = el;
+const ItemsTableRow = ({ el, displayField, deleteData, endpoint}) => {
 
+    let id = el["id"]
+    let field = el[displayField]
     return (
         <tr>
             <td>{id}</td>
-            <td>{name}</td>
-            <td>              
-                <Link to={`/users/admin/categories/edit/${id}`}>
+            <td>{field}</td>
+            <td>
+                <Link to={`/user/admin/${endpoint}edit/${id}`}>
                     <button>Edit</button>
                 </Link>
-                <button onClick={() => deleteData(id)}>Delete</button>
+                <button onClick={() => deleteData(id, field)}>Delete</button>
             </td>
         </tr>
     );

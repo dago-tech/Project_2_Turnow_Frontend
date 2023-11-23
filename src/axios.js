@@ -12,7 +12,7 @@ const api = axios.create({
 		//'Content-Type': 'multipart/form-data',
 		'Content-Type': 'application/json',
 		
-		accept: 'application/json',
+		//accept: 'application/json',
 		//accept: '*/*',
 	}, 
 });

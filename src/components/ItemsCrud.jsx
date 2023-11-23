@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
 import Message from "./Message";
-import { getData } from '../axios';
 import ItemsTable from "./ItemsTable";
 import api from "../axios";
 
-const ItemsCrud = ({endpoint}) => {
+const ItemsCrud = ({endpoint, displayField}) => {
     const [data, setData] = useState(null);
-    const [dataToEdit, setDataToEdit] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -27,27 +25,23 @@ const ItemsCrud = ({endpoint}) => {
                 setData(null);
                 setError(error);
                 console.error('Error in GET request:', error);
-            // Maneja el error según tus necesidades
+                throw error;
             } finally {
-                // Este bloque siempre se ejecutará
                 setLoading(false);
             }
         };  
-        getData();   
-
+        getData();
         }, []);
 
 
-    const deleteData = (id) => {
+    const deleteData = (id, name) => {
+
         let isDelete = window.confirm(
-            `¿Do you want to delete '${id} register'?`
+            `¿Do you want to delete the register: ${name}?`
         );
 
         if (isDelete) {
             let delete_endpoint = `${endpoint}delete/${id}`;
-            // let options = {
-            //     headers: { "content-type": "application/json" },
-            // };
             
             const deleteDataAux = async () => {
                 try {
@@ -59,8 +53,7 @@ const ItemsCrud = ({endpoint}) => {
                     setData(null);
                     setError(error);
                     console.error('Error in DELETE request:', error);
-                    //throw error;
-                // Maneja el error según tus necesidades
+                    throw error;
                 } 
             };  
             deleteDataAux();
@@ -72,17 +65,18 @@ const ItemsCrud = ({endpoint}) => {
             {loading && <Loader />}
             {error && (
                 <Message
-                msg={`Error: ${error.message}`}
+                    msg={`Error: ${error.message}`}
                 />
             )}
             {data && (
                 <ItemsTable
-                data={data}
-                // setDataToEdit={setDataToEdit}
-                deleteData={deleteData}
+                    data={data}
+                    displayField={displayField}
+                    deleteData={deleteData}
+                    endpoint={endpoint}
                 />
             )}
-            <Link to={`/users/admin/categories/create`}>
+            <Link to={`/user/admin/${endpoint}create`}>
                 <button>Create</button>
             </Link>
         </div>

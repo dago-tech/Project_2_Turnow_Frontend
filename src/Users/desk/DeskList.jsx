@@ -1,13 +1,15 @@
-import { ItemsList } from "../../components/ItemsList";
+import ItemsCrud from "../../components/ItemsCrud";
 
-export function DesksList() {
+
+export function DeskList() {
     //const [count, setCount] = useState(0)
   
     return (
         <>            
             <h1>List of desks component</h1>
-            <ItemsList
+            <ItemsCrud
                 endpoint="desk/"
+                displayField= "name"
             />
         </>
     )

@@ -7,7 +7,7 @@ export function Principal() {
         <>            
             <h1>TURNOW</h1>
             {/* Botones de navegación con el componente Link */}
-            <Link to="/clients">
+            <Link to="/client">
                 <button>Clients</button>
             </Link>
             <br />
@@ -17,7 +17,7 @@ export function Principal() {
             </Link>
             <br />
             <br />
-            <Link to="/users">
+            <Link to="/user">
                 <button>Users - Admin</button>
             </Link>
         </>

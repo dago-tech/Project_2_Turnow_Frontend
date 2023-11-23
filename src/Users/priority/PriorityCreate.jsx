@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../axios';
 import { useState } from 'react';
 
-export function CategoriesCreate() {
+export function PriorityCreate() {
 
-	const endpoint = "category/create/"
+	const endpoint = "priority/create/"
     const history = useNavigate();
 	const initialFormData = Object.freeze({
 		name: '',
@@ -17,7 +17,6 @@ export function CategoriesCreate() {
 	const handleChange = (e) => {
 		setFormData({
 			...formData,
-			// Trimming any whitespace
 			[e.target.name]: e.target.value,
 		});
 	};
@@ -37,7 +36,7 @@ export function CategoriesCreate() {
 		postData(endpoint, formData)
 		
 		history({
-			pathname: '/users/admin/categories/',
+			pathname: '/user/admin/priority/',
 		});
 		window.location.reload();
 	};
@@ -48,27 +47,27 @@ export function CategoriesCreate() {
 
     return ( 
         <div>
-            <h1>Categories Create</h1>
-            <form onSubmit={handleSubmit}>
+            <h1>Priorities Create</h1>
+            <form>
                 <label htmlFor="name">Name: </label>
                 <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                onChange={handleChange}
-                value={formData.name}
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    onChange={handleChange}
+                    value={formData.name}
                 />
                 <br />
                 <label htmlFor="description">Description: </label>
                 <input
-                type="text"
-                name="description"
-                placeholder="Description"
-                onChange={handleChange}
-                value={formData.description}
+                    type="text"
+                    name="description"
+                    placeholder="Description"
+                    onChange={handleChange}
+                    value={formData.description}
                 />
                 <br />
-                <input type="submit" value="Send" />
+                <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
         </div>

@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../../axios';
 import { useState, useEffect } from 'react';
+import api from '../../axios';
 
-export function CategoriesEdit() {
+
+export function CategoryEdit() {
 
     const history = useNavigate();
 	const { id } = useParams();
@@ -21,14 +22,12 @@ export function CategoriesEdit() {
 				['name']: response.data.name,
 				['description']: response.data.description,
 			});
-			console.log(response.data);
 		});
-	}, [setFormData]);
+	}, []);
 
 	const handleChange = (e) => {
 		setFormData({
 			...formData,
-			// Trimming any whitespace
 			[e.target.name]: e.target.value,
 		});
 	};
@@ -42,40 +41,38 @@ export function CategoriesEdit() {
 			description: formData.description
 		});
 		history({
-			pathname: '/users/admin/categories/',
+			pathname: '/user/admin/category/',
 		});
 		window.location.reload();
 	};
 
     const handleReset = (e) => {
         setFormData(initialFormData);
-        // setDataToEdit(null);
     };
 
     return ( 
         <div>
             <h1>Categories update {id}</h1>
-            {/* <h3>{dataToEdit ? "Editar" : "Agregar"}</h3> */}
-            <form onSubmit={handleSubmit}>
+            <form>
                 <label htmlFor="name">Name: </label>
                 <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                onChange={handleChange}
-                value={formData.name}
+					type="text"
+					name="name"
+					placeholder="Name"
+					onChange={handleChange}
+					value={formData.name}
                 />
                 <br />
                 <label htmlFor="description">Description: </label>
                 <input
-                type="text"
-                name="description"
-                placeholder="Description"
-                onChange={handleChange}
-                value={formData.description ?? ""}
+					type="text"
+					name="description"
+					placeholder="Description"
+					onChange={handleChange}
+					value={formData.description ?? ""}
                 />
                 <br />
-                <input type="submit" value="Send" />
+                <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
         </div>
