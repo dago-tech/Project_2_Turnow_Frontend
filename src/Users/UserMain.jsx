@@ -22,7 +22,7 @@ export function UserMain() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/admin/*" element={<AdminMain />}/>
                 <Route path="/desk" element={<DeskMain />} />
-                <Route path="*" element={<Error404 />} />
+                {/* <Route path="*" element={<Error404 />} /> */}
             </Routes>
 
         </>

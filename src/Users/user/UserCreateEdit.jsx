@@ -1,14 +1,16 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import api from '../../axios';
+import { getData, patchData, postData } from '../../axios';
 
 
-export function UserEdit() {
+export function UserCreateEdit({ edit }) {
 
+    const endpoint = "user/create/"
     const history = useNavigate();
 	const { id } = useParams();
 	const initialFormData = Object.freeze({
 		email: '',
+        password: '',
         user_name: '',
         first_name: '',
         last_name: '',
@@ -17,20 +19,27 @@ export function UserEdit() {
 	});
 
 	const [formData, setFormData] = useState(initialFormData);
+    const [errorForm, setErrorForm] = useState('');
 
 	useEffect(() => {
 
-		api.get('user/get/' + id).then((response) => {
-			setFormData({
-				...formData,
-				['email']: response.data.email,
-				['user_name']: response.data.user_name,
-				['first_name']: response.data.first_name,
-				['last_name']: response.data.last_name,
-				['is_admin']: response.data.is_admin,
-				['is_active']: response.data.is_active
-			});
-		});
+        if (edit) {
+			getData('user/get/' + id).then(response => {
+				console.log(response);
+				setFormData({
+					...formData,
+					['email']: response.email,
+                    ['user_name']: response.user_name,
+                    ['first_name']: response.first_name,
+                    ['last_name']: response.last_name,
+                    ['is_admin']: response.is_admin,
+                    ['is_active']: response.is_active
+				});
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});		
+		}
 	}, []);
 
 	const handleChange = (e) => {
@@ -43,14 +52,31 @@ export function UserEdit() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		api.patch(`user/update/` + id + '/', {
-			email: formData.email,
-			user_name: formData.user_name,
-			first_name: formData.first_name,
-			last_name: formData.last_name,
-			is_admin: formData.is_admin,
-			is_active: formData.is_active
-		});
+        if (edit && (formData.email=='' || formData.user_name==''
+            || formData.first_name=='' || formData.last_name=='')) {
+            setErrorForm('¡You did not fill out all the fields!');
+            return;
+        } else if (!edit && (formData.email=='' || formData.user_name==''
+            || formData.first_name=='' || formData.last_name=='' || formData.password=='')) {
+            setErrorForm('¡You did not fill out all the fields!');
+            return
+        }
+        // Clean ErrorForm if no validation issues
+        setErrorForm('');		
+		
+		if (edit) {
+			patchData(`user/update/` + id + '/', {
+				email: formData.email,
+                user_name: formData.user_name,
+                first_name: formData.first_name,
+                last_name: formData.last_name,
+                is_admin: formData.is_admin,
+                is_active: formData.is_active
+			})	
+		} else {
+			postData(endpoint, formData)
+		}
+
 		history({
 			pathname: '/user/admin/user/',
 		});
@@ -63,7 +89,7 @@ export function UserEdit() {
 
     return ( 
         <div>
-            <h1>Users update {id}</h1>
+            <h1>Users update</h1>
             <form>
                 <label htmlFor="email">Email: </label>
                 <input
@@ -80,9 +106,22 @@ export function UserEdit() {
 					name="user_name"
 					placeholder="User name"
 					onChange={handleChange}
-					value={formData.user_name ?? ""}
+					value={formData.user_name}
                 />
                 <br />
+                {!edit && (
+                    <>
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange} />
+                        <br />
+                    </>
+                )}                
 				<label htmlFor="first_name">First name: </label>
                 <input
                     type="text"
@@ -121,6 +160,7 @@ export function UserEdit() {
                 Is active
                 </label>
                 <br />
+                {errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>

@@ -1,10 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import api from '../../axios';
+import { getData, postData, putData } from '../../axios';
 
 
-export function CategoryEdit() {
+export function CategoryCreateEdit({ edit }) {
 
+	const endpoint = "category/create/"
     const history = useNavigate();
 	const { id } = useParams();
 	const initialFormData = Object.freeze({
@@ -13,16 +14,23 @@ export function CategoryEdit() {
 	});
 
 	const [formData, setFormData] = useState(initialFormData);
+	const [errorForm, setErrorForm] = useState('');
 
 	useEffect(() => {
 
-		api.get('category/get/' + id).then((response) => {
-			setFormData({
-				...formData,
-				['name']: response.data.name,
-				['description']: response.data.description,
-			});
-		});
+		if (edit) {
+			getData('category/get/' + id).then(response => {
+				console.log(response);
+				setFormData({
+					...formData,
+					['name']: response.name,
+					['description']: response.description,
+				});
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});		
+		}		
 	}, []);
 
 	const handleChange = (e) => {
@@ -36,10 +44,22 @@ export function CategoryEdit() {
 		e.preventDefault();
 		console.log(formData);
 
-		api.put(`category/update/` + id + '/', {
-			name: formData.name,
-			description: formData.description
-		});
+		if (formData.name=='') {
+            setErrorForm('¡You did not fill out all the fields!');
+            return;
+        }        
+        // Clean ErrorForm if no validation issues
+        setErrorForm('');
+		
+		if (edit) {
+			putData(`category/update/` + id + '/', {
+				name: formData.name,
+				description: formData.description
+			})	
+		} else {
+			postData(endpoint, formData)
+		}
+
 		history({
 			pathname: '/user/admin/category/',
 		});
@@ -52,7 +72,7 @@ export function CategoryEdit() {
 
     return ( 
         <div>
-            <h1>Categories update {id}</h1>
+            <h1>Category</h1>
             <form>
                 <label htmlFor="name">Name: </label>
                 <input
@@ -72,6 +92,7 @@ export function CategoryEdit() {
 					value={formData.description ?? ""}
                 />
                 <br />
+				{errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>

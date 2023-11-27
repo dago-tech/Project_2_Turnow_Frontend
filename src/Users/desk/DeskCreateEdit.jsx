@@ -1,14 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { getData, postData, putData } from '../../axios';
 import api from '../../axios';
-import { useEffect, useState } from 'react';
 
 
-export function DeskCreate() {
+export function DeskCreateEdit({ edit }) {
 
-	const endpoint = "desk/create/"
+    const endpoint = "desk/create/"
     const history = useNavigate();
+	const { id } = useParams();
 	const initialFormData = Object.freeze({
-		name: '',
+        name: '',
 		state: true,
         busy: false,
         user: '',
@@ -16,17 +18,34 @@ export function DeskCreate() {
 	});
 
 	const [formData, setFormData] = useState(initialFormData);
-    const [userOptions, setUserOptions] = useState([]);
+	const [userOptions, setUserOptions] = useState([]);
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [errorForm, setErrorForm] = useState('');
 
-    useEffect(() => {
-        // Load User and category fields options when component did mount
-        getForeignKey('user/', setUserOptions);
+	useEffect(() => {
+		getForeignKey('user/', setUserOptions);
         getForeignKey('category/', setCategoryOptions);
-    }, []);
-  
-    const getForeignKey = async (endpoint, func) => {
+
+
+        if (edit) {
+			getData('desk/get/' + id).then(response => {
+				console.log(response);
+				setFormData({
+					...formData,
+					['name']: response.name,
+                    ['state']: response.state,
+                    ['busy']: response.busy,
+                    ['user']: response.user,
+                    ['category']: response.category,
+				});
+			})
+			.catch(error => {
+				console.error('Error:', error);
+			});		
+		}
+	}, []);
+
+	const getForeignKey = async (endpoint, func) => {
         try {
             const response = await api.get(endpoint);
             func(response.data);
@@ -41,18 +60,24 @@ export function DeskCreate() {
 			...formData,
 			[e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
 		});
-        console.log(formData)
 	};
 
-    const handleChangeFk = (e) => {
+	const handleChangeFk = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: parseInt(value, 10),
-        });
-      };
+        if (value=='') {
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: parseInt(value, 10),
+            });
+        }
+    };
 
-    const handleMultipleChange = (e) => {
+	const handleMultipleChange = (e) => {
         const { name, options } = e.target;
         const selectedValues = Array.from(options)
             .filter((option) => option.selected)
@@ -66,26 +91,28 @@ export function DeskCreate() {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+        console.log(formData)
 
-        if (formData.category.length === 0 || formData.user=='') {
+        if (formData.name=='' || !formData.user || formData.category.length==0) {
             setErrorForm('¡You did not fill out all the fields!');
             return;
         }        
         // Clean ErrorForm if no validation issues
         setErrorForm('');
-
-		const postData = async (endpoint, data) => {
-			try {
-				const response = await api.post(endpoint, data);
-                console.log(response.data)
-				return response.data;
-			} catch (error) {
-				console.error('Error in POST request:', error);
-				throw error;
-			}
-		};
-		postData(endpoint, formData)
 		
+		
+		if (edit) {
+			putData(`desk/update/` + id + '/', {
+				name: formData.name,
+                state: formData.state,
+                busy: formData.busy,
+                user: formData.user,
+                category: formData.category,
+			})	
+		} else {
+			postData(endpoint, formData)
+		}
+
 		history({
 			pathname: '/user/admin/desk/',
 		});
@@ -98,9 +125,9 @@ export function DeskCreate() {
 
     return ( 
         <div>
-            <h1>Service desk Creation</h1>
+            <h1>Service Desk</h1>
             <form>
-                <label htmlFor="name">Name: </label>
+			<label htmlFor="name">Name: </label>
                 <input
                     type="text"
                     name="name"
@@ -115,8 +142,8 @@ export function DeskCreate() {
                     name="user"
                     value={formData.user}
                     onChange={handleChangeFk}
-                    >
-                    <option value="">Select...</option>
+                >
+                    <option value=''>Select...</option>
                     {userOptions.map((option) => (
                         <option key={option.id} value={option.id}>
                             {option.user_name}
@@ -160,8 +187,8 @@ export function DeskCreate() {
                 </label>
                 <br />
                 {errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}
-                <input type="button" value="Send" onClick={handleSubmit} />
-                <input type="reset" value="Clear" onClick={handleReset} />
+				<input type="button" value="Send" onClick={handleSubmit} />
+				<input type="reset" value="Clear" onClick={handleReset} />
             </form>
         </div>
     )

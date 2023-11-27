@@ -39,6 +39,25 @@ export const postData = async (endpoint, data) => {
 	}
 };
 
+  // Función para realizar una solicitud PUT
+export const putData = async (endpoint, data) => {
+	try {
+		await api.put(endpoint, data);
+	} catch (error) {
+		console.error('Error in PUT request:', error);
+		throw error;
+	}
+};
+
+export const patchData = async (endpoint, data) => {
+	try {
+		await api.patch(endpoint, data);
+	} catch (error) {
+		console.error('Error in PATCH request:', error);
+		throw error;
+	}
+};
+
 
 //El siguiente codigo es para solicitar un nuevo access token cuando se haya vencido, esto
 // usando el refresh token.

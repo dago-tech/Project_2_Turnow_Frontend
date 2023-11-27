@@ -19,9 +19,9 @@ function App() {
                 <Routes>
                     <Route exact path="/" element={<Principal/>} />
                     <Route path="/notification" element={<Notification/>}/>
-                    <Route path="/client" element={<Clients/>}/>
+                    <Route path="/client/*" element={<Clients/>}/>
                     <Route path="/user/*" element={<UserMain />}/>
-                    <Route path="*" element={<Error404/>} />
+                    {/* <Route path="*" element={<Error404/>} /> */}
                 </Routes>
             </BrowserRouter>
 
