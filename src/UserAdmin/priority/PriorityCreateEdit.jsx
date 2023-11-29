@@ -3,14 +3,15 @@ import { useState, useEffect } from 'react';
 import { getData, postData, putData } from '../../axios';
 
 
-export function ClientCreateEdit({ edit }) {
+export function PriorityCreateEdit({ edit }) {
 
-	const endpoint = "client/create/"
+	const endpoint = "priority/create/"
     const history = useNavigate();
 	const { id } = useParams();
 	const initialFormData = Object.freeze({
-		id_type: '',
-		personal_id: ''
+		name: '',
+		description: '',
+		priority: 0,
 	});
 
 	const [formData, setFormData] = useState(initialFormData);
@@ -19,18 +20,19 @@ export function ClientCreateEdit({ edit }) {
 	useEffect(() => {
 
 		if (edit) {
-			getData('client/get/' + id).then(response => {
+			getData('priority/get/' + id).then(response => {
 				console.log(response);
 				setFormData({
 					...formData,
-					['id_type']: response.id_type,
-					['personal_id']: response.personal_id
+					['name']: response.name,
+					['description']: response.description,
+					['priority']: response.priority,
 				});
 			})
 			.catch(error => {
 				console.error('Error:', error);
 			});		
-		}
+		}		
 	}, []);
 
 	const handleChange = (e) => {
@@ -45,7 +47,7 @@ export function ClientCreateEdit({ edit }) {
 		e.preventDefault();
 		console.log(formData);
 
-		if (formData.personal_id=='') {
+		if (formData.name=='') {
             setErrorForm('¡You did not fill out all the fields!');
             return;
         }        
@@ -54,16 +56,17 @@ export function ClientCreateEdit({ edit }) {
 		
 		
 		if (edit) {
-			putData(`client/update/` + id + '/', {
-				id_type: formData.id_type,
-				personal_id: formData.personal_id
+			putData(`priority/update/` + id + '/', {
+				name: formData.name,
+				description: formData.description,
+				priority: formData.priority
 			})	
 		} else {
 			postData(endpoint, formData)
 		}
 
 		history({
-			pathname: '/user/admin/client/',
+			pathname: '/user_admin/priority/',
 		});
 		window.location.reload();
 	};
@@ -74,29 +77,32 @@ export function ClientCreateEdit({ edit }) {
 
     return ( 
         <div>
-            <h1>Client</h1>
+            <h1>Priority</h1>
             <form>
-			<label htmlFor="id_type">ID type:</label>
-                <select
-                    id="id_type"
-                    name="id_type"
-                    value={formData.id_type}
-                    onChange={handleChange}
-                >
-                    <option value="">Select...</option>                    
-                    <option value="cedula">CC</option>
-                    <option value="tarjeta_identidad">TI</option>
-                    <option value="pasaporte">PA</option>
-                    <option value="cedula_extrangería">CE</option>
-                </select>
-                <br />
-                <label htmlFor="personal_id">Personal ID: </label>
+                <label htmlFor="name">Name: </label>
                 <input
-                    type="text"
-					name="personal_id"
-                    placeholder="Personal ID"
-                    onChange={handleChange}
-                    value={formData.personal_id}
+					type="text"
+					name="name"
+					placeholder="Name"
+					onChange={handleChange}
+					value={formData.name}
+                />
+                <br />
+                <label htmlFor="description">Description: </label>
+                <input
+					type="text"
+					name="description"
+					placeholder="Description"
+					onChange={handleChange}
+					value={formData.description ?? ""}
+                />
+                <br />
+				<input
+					type="text"
+					name="priority"
+					placeholder="0 to 20 number"
+					onChange={handleChange}
+					value={formData.priority}
                 />
                 <br />
 				{errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}

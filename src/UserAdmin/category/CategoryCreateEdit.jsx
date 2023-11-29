@@ -3,15 +3,14 @@ import { useState, useEffect } from 'react';
 import { getData, postData, putData } from '../../axios';
 
 
-export function PriorityCreateEdit({ edit }) {
+export function CategoryCreateEdit({ edit }) {
 
-	const endpoint = "priority/create/"
+	const endpoint = "category/create/"
     const history = useNavigate();
 	const { id } = useParams();
 	const initialFormData = Object.freeze({
 		name: '',
-		description: '',
-		priority: 0,
+		description: ''
 	});
 
 	const [formData, setFormData] = useState(initialFormData);
@@ -20,13 +19,12 @@ export function PriorityCreateEdit({ edit }) {
 	useEffect(() => {
 
 		if (edit) {
-			getData('priority/get/' + id).then(response => {
+			getData('category/get/' + id).then(response => {
 				console.log(response);
 				setFormData({
 					...formData,
 					['name']: response.name,
 					['description']: response.description,
-					['priority']: response.priority,
 				});
 			})
 			.catch(error => {
@@ -43,7 +41,6 @@ export function PriorityCreateEdit({ edit }) {
 	};
 
 	const handleSubmit = (e) => {
-
 		e.preventDefault();
 		console.log(formData);
 
@@ -54,19 +51,17 @@ export function PriorityCreateEdit({ edit }) {
         // Clean ErrorForm if no validation issues
         setErrorForm('');
 		
-		
 		if (edit) {
-			putData(`priority/update/` + id + '/', {
+			putData(`category/update/` + id + '/', {
 				name: formData.name,
-				description: formData.description,
-				priority: formData.priority
+				description: formData.description
 			})	
 		} else {
 			postData(endpoint, formData)
 		}
 
 		history({
-			pathname: '/user/admin/priority/',
+			pathname: '/user_admin/category/',
 		});
 		window.location.reload();
 	};
@@ -77,7 +72,7 @@ export function PriorityCreateEdit({ edit }) {
 
     return ( 
         <div>
-            <h1>Priority</h1>
+            <h1>Category</h1>
             <form>
                 <label htmlFor="name">Name: </label>
                 <input
@@ -95,14 +90,6 @@ export function PriorityCreateEdit({ edit }) {
 					placeholder="Description"
 					onChange={handleChange}
 					value={formData.description ?? ""}
-                />
-                <br />
-				<input
-					type="text"
-					name="priority"
-					placeholder="0 to 20 number"
-					onChange={handleChange}
-					value={formData.priority}
                 />
                 <br />
 				{errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}

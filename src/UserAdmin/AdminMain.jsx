@@ -12,33 +12,36 @@ import { PriorityCreateEdit } from "./priority/PriorityCreateEdit";
 import { ClientCreateEdit } from "./client/ClientCreateEdit";
 import { DeskCreateEdit } from "./desk/DeskCreateEdit";
 import { UserCreateEdit } from "./user/UserCreateEdit";
+import Login from "./Login";
 
 
 export function AdminMain() {
   
     return (
-
-        <div style={{ display: 'flex' }}>
-            <div style={{ flex: 1 }}>
+        <div style={{ display: 'flex'}}>
+            <div style={{ flex: 1, textAlign: 'center'}}>
                 <h2>Admin menu</h2>
                 <nav>
                     <ul>
-                        <li><Link to="/user/admin/user">Users</Link></li>
-                        <li><Link to="/user/admin/category">Categories</Link></li>
-                        <li><Link to="/user/admin/priority">Priorities</Link></li>
-                        <li><Link to="/user/admin/desk">Services desk</Link></li>
-                        <li><Link to="/user/admin/client">Clients</Link></li>
-                        <li><Link to="/user/admin/turn">Turns</Link></li>
+                        <li><Link to="/user_admin/login">Login</Link></li>
+                        <li><Link to="/user_admin/user">Users</Link></li>
+                        <li><Link to="/user_admin/category">Categories</Link></li>
+                        <li><Link to="/user_admin/priority">Priorities</Link></li>
+                        <li><Link to="/user_admin/desk">Services desk</Link></li>
+                        <li><Link to="/user_admin/client">Clients</Link></li>
+                        <li><Link to="/user_admin/turn">Turns</Link></li>
                         <br />
                         <li><Link to="/notification">Turn notification</Link></li>
                         <br />
-                        <li><Link to="/user/admin/logout">Logout</Link></li>
+                        <li><Link to="/user_admin/logout">Logout</Link></li>
                     </ul>
                 </nav>
             </div>
-
-            <div style={{ flex: 2, marginLeft: '20px' }}>
-                <Routes>                    
+            {/* flex: 1 and flex: 5 means total width will be divided into 6 sections */}
+            {/* 1vw viewport width represents 1% of browser width */}
+            <div style={{ flex: 5, marginRight: '15vw' }}>
+                <Routes>
+                    <Route path="/login" element={<Login />} />                
                     <Route path="/user" element={<UserList />} />
                     <Route path="/user/edit/:id" element={<UserCreateEdit edit={true} />} />
                     <Route path="/user/create" element={<UserCreateEdit />} />

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { postData } from '../axios';
+import ClientContext from '../context/ClientContext';
 import '../styles/main.css'
 
 export function ClientId () {
+
+    const { setIdClient } = useContext(ClientContext);
 
     const endpoint = "client/create/"
     const history = useNavigate();
@@ -14,6 +18,7 @@ export function ClientId () {
     const handleSelection = (type) => {
         setIdType(type);
         setSelected(type);
+        
     };
 
     const handleClick = (number) => {
@@ -31,99 +36,106 @@ export function ClientId () {
 		    personal_id: idNumber
         }
         
-        postData(endpoint, data)
-        console.log(data)
+        postData(endpoint, data).then(response => {
+            setIdClient(response.id)
+        })
+
         history({
 			pathname: '/client/priority/',
-		});     
+		});
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ margin: 20 }}>
-                <h2>Identification type:</h2>
-                <ul style={{ padding: 0 }}>
-                    <li>
-                        <button 
-                            onClick={() => handleSelection('cedula')}
-                            className={`${selected === 'cedula' ? 'selected' : ''} id_button`}
-                        >
-                            Cédula de Ciudadanía
-                        </button>
-                    </li>
-                    <li>
-                        <button 
-                            onClick={() => handleSelection('tarjeta_identidad')}
-                            className={`${selected === 'tarjeta_identidad' ? 'selected' : ''} id_button`}
-                        >
-                            Tarjeta de Identidad
-                        </button>
-                    </li>
-                    <li>
-                        <button 
-                            onClick={() => handleSelection('pasaporte')}
-                            className={`${selected === 'pasaporte' ? 'selected' : ''} id_button`}
-                            
-                        >
-                            Pasaporte
-                        </button>
-                    </li>
-                    <li>
-                        <button 
-                            onClick={() => handleSelection('cedula_extrangería')}
-                            className={`${selected === 'cedula_extrangería' ? 'selected' : ''} id_button`}
-                        >
-                            Cedula de Extrangería
-                        </button>
-                    </li>
-                </ul>
-            </div>
+        <>
+            <div className={'container'}>
+                <div style={{ margin: 20, textAlign: 'right'}}>
+                    <h2>Identification type:</h2>
+                    <ul style={{ padding: 0 }}>
+                        <li>
+                            <button 
+                                onClick={() => handleSelection('cedula')}
+                                className={`${selected === 'cedula' ? 'selected' : ''} id_button`}
+                            >
+                                Cédula de Ciudadanía
+                            </button>
+                        </li>
+                        <li>
+                            <button 
+                                onClick={() => handleSelection('tarjeta_identidad')}
+                                className={`${selected === 'tarjeta_identidad' ? 'selected' : ''} id_button`}
+                            >
+                                Tarjeta de Identidad
+                            </button>
+                        </li>
+                        <li>
+                            <button 
+                                onClick={() => handleSelection('pasaporte')}
+                                className={`${selected === 'pasaporte' ? 'selected' : ''} id_button`}
+                                
+                            >
+                                Pasaporte
+                            </button>
+                        </li>
+                        <li>
+                            <button 
+                                onClick={() => handleSelection('cedula_extrangería')}
+                                className={`${selected === 'cedula_extrangería' ? 'selected' : ''} id_button`}
+                            >
+                                Cedula de Extrangería
+                            </button>
+                        </li>
+                    </ul>
+                </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <h2>Enter your ID number:</h2>
-                <div style={{ minHeight: '40px', width: '120px', border: '1px solid #ccc', 
-                            marginBottom: '10px', margin: 'auto' }}>
-                    <p style={{ margin: 0, padding: '10px' }}>{idNumber}</p>
-                </div>
-                <div>
-                {/* Numeric keyboard in a table */}
-                <table style={{ margin: 'auto' }}>
-                    <tbody>
-                    {[0, 1, 2].map((fila) => (
-                        <tr key={fila}>
-                        {[1, 2, 3].map((columna) => {
-                            const number = fila * 3 + columna;
-                            return (
-                            <td key={columna}>
-                                <button onClick={() => handleClick(number)}>
-                                    {number}
-                                </button>
+                <div style={{textAlign: 'center', width: '200px'}}>
+                {/* style={{ display: 'flex', flexDirection: 'column' }} */}
+                    <h2>Enter your ID number:</h2>
+                    <div style={{ minHeight: '40px', width: '120px', border: '1px solid #ccc', 
+                                marginBottom: '10px', margin: 'auto'}}>
+                        <p style={{ margin: 0, padding: '10px' }}>{idNumber}</p>
+                    </div>
+                    <div>
+                    {/* Numeric keyboard in a table */}
+                    <table style={{margin: 'auto'}}>
+                        <tbody>
+                        {[0, 1, 2].map((fila) => (
+                            <tr key={fila}>
+                            {[1, 2, 3].map((columna) => {
+                                const number = fila * 3 + columna;
+                                return (
+                                <td key={columna}>
+                                    <button onClick={() => handleClick(number)}>
+                                        {number}
+                                    </button>
+                                </td>
+                                );
+                            })}
+                            </tr>
+                        ))}
+                        <tr>
+                            <td>
+                            <button onClick={() => handleClick(0)}>0</button>
                             </td>
-                            );
-                        })}
+                            <td colSpan="2">
+                            <button onClick={handleErase}>Erase</button>
+                            </td>
                         </tr>
-                    ))}
-                    <tr>
-                        <td>
-                        <button onClick={() => handleClick(0)}>0</button>
-                        </td>
-                        <td colSpan="2">
-                        <button onClick={handleErase}>Erase</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                    </div>
                 </div>
+
             </div>
             
-            <div>
+            
+            <div style={{ textAlign: 'right' }}>
                 <button
-                    style={{ position: 'absolute', bottom: 0 }}
+                    className={'next_button'}
                     onClick={handleSubmit} disabled={!idType || !idNumber}
                 >
                     Next
                 </button>
             </div>
-        </div>
+        </>
     );
 };

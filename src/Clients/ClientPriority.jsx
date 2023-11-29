@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import ClientContext from '../context/ClientContext';
 import { getData } from '../axios';
 
 
 export function ClientPriority () {
+
+    const { setIdPriority } = useContext(ClientContext);
 
     const history = useNavigate();
     const [priorities, setPriorities] = useState([]);
@@ -14,12 +17,11 @@ export function ClientPriority () {
         // Realizar la solicitud a la API para obtener las categorías
 
         getData('priority/').then(response => {
-            console.log(response);
             setPriorities(response,);
         })
         .catch(error => {
             console.error('Error:', error);
-        });	
+        });
 
     }, []);
 
@@ -35,16 +37,26 @@ export function ClientPriority () {
     };
 
     const handleSubmit = () => {
+
+        setIdPriority(selected)
+
         history({
 			pathname: '/client/category/',
 		}); 
     };
 
     return (
-        <div>
-            <h2>Priority:</h2>
-            <button onClick={handlePreviousPage}>Back</button>
-            <ul>
+        <>
+            <h2 style={{textAlign: 'center'}}>Select a priority:</h2>
+            <div style={{textAlign: 'left'}}>
+                <button
+                    className='back_button'
+                    onClick={handlePreviousPage}
+                >
+                    Back
+                </button>
+            </div>
+            <ul style={{textAlign: 'center'}}>
                 {priorities.map((priority) => (
                 <li key={priority.id}>
                     <button
@@ -56,11 +68,15 @@ export function ClientPriority () {
                 </li>
                 ))}
             </ul>
-            <button 
-                onClick={handleSubmit} disabled={!selected}
-            >
-                Next
-            </button>
-        </div>
+            <div style={{textAlign: 'right'}}>
+                <button
+                    className='next_button'
+                    onClick={handleSubmit}
+                    disabled={!selected}
+                >
+                    Next
+                </button>
+            </div>
+        </>
     );
 };

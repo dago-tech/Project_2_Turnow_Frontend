@@ -25,7 +25,6 @@ export function UserCreateEdit({ edit }) {
 
         if (edit) {
 			getData('user/get/' + id).then(response => {
-				console.log(response);
 				setFormData({
 					...formData,
 					['email']: response.email,
@@ -78,7 +77,7 @@ export function UserCreateEdit({ edit }) {
 		}
 
 		history({
-			pathname: '/user/admin/user/',
+			pathname: '/user_admin/user/',
 		});
 		window.location.reload();
 	};

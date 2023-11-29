@@ -1,25 +1,37 @@
 import { Link } from 'react-router-dom';
 
 export function Principal() {
-    //const [count, setCount] = useState(0)
   
     return (
-        <>            
-            <h1>TURNOW</h1>
-            {/* Botones de navegación con el componente Link */}
+        <div style={{textAlign:'center'}}>            
+            <h1 style={{margin: '70px'}}>TURNOW</h1>
+            
             <Link to="/client">
-                <button>Clients</button>
+                <button className='principal_button'>
+                    Clients
+                </button>
             </Link>
             <br />
             <br />
             <Link to="/notification">
-                <button>Notification Screen</button>
+                <button className='principal_button'>
+                    Notification Screen
+                </button>
             </Link>
             <br />
             <br />
-            <Link to="/user">
-                <button>Users - Admin</button>
+            <Link to="/user_admin">
+                <button className='principal_button'>
+                    User - Admin
+                </button>
             </Link>
-        </>
+            <br />
+            <br />
+            <Link to="/user_desk">
+                <button className='principal_button'>
+                    User - Desk
+                </button>
+            </Link>
+        </div>
     )
 }

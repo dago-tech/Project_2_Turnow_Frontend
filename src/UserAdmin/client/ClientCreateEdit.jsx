@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { getData, postData, putData } from '../../axios';
 
 
-export function CategoryCreateEdit({ edit }) {
+export function ClientCreateEdit({ edit }) {
 
-	const endpoint = "category/create/"
+	const endpoint = "client/create/"
     const history = useNavigate();
 	const { id } = useParams();
 	const initialFormData = Object.freeze({
-		name: '',
-		description: ''
+		id_type: '',
+		personal_id: ''
 	});
 
 	const [formData, setFormData] = useState(initialFormData);
@@ -19,18 +19,18 @@ export function CategoryCreateEdit({ edit }) {
 	useEffect(() => {
 
 		if (edit) {
-			getData('category/get/' + id).then(response => {
+			getData('client/get/' + id).then(response => {
 				console.log(response);
 				setFormData({
 					...formData,
-					['name']: response.name,
-					['description']: response.description,
+					['id_type']: response.id_type,
+					['personal_id']: response.personal_id
 				});
 			})
 			.catch(error => {
 				console.error('Error:', error);
 			});		
-		}		
+		}
 	}, []);
 
 	const handleChange = (e) => {
@@ -41,27 +41,29 @@ export function CategoryCreateEdit({ edit }) {
 	};
 
 	const handleSubmit = (e) => {
+
 		e.preventDefault();
 		console.log(formData);
 
-		if (formData.name=='') {
+		if (formData.personal_id=='') {
             setErrorForm('¡You did not fill out all the fields!');
             return;
         }        
         // Clean ErrorForm if no validation issues
         setErrorForm('');
 		
+		
 		if (edit) {
-			putData(`category/update/` + id + '/', {
-				name: formData.name,
-				description: formData.description
+			putData(`client/update/` + id + '/', {
+				id_type: formData.id_type,
+				personal_id: formData.personal_id
 			})	
 		} else {
 			postData(endpoint, formData)
 		}
 
 		history({
-			pathname: '/user/admin/category/',
+			pathname: '/user_admin/client/',
 		});
 		window.location.reload();
 	};
@@ -72,24 +74,29 @@ export function CategoryCreateEdit({ edit }) {
 
     return ( 
         <div>
-            <h1>Category</h1>
+            <h1>Client</h1>
             <form>
-                <label htmlFor="name">Name: </label>
-                <input
-					type="text"
-					name="name"
-					placeholder="Name"
-					onChange={handleChange}
-					value={formData.name}
-                />
+			<label htmlFor="id_type">ID type:</label>
+                <select
+                    id="id_type"
+                    name="id_type"
+                    value={formData.id_type}
+                    onChange={handleChange}
+                >
+                    <option value="">Select...</option>                    
+                    <option value="cedula">CC</option>
+                    <option value="tarjeta_identidad">TI</option>
+                    <option value="pasaporte">PA</option>
+                    <option value="cedula_extrangería">CE</option>
+                </select>
                 <br />
-                <label htmlFor="description">Description: </label>
+                <label htmlFor="personal_id">Personal ID: </label>
                 <input
-					type="text"
-					name="description"
-					placeholder="Description"
-					onChange={handleChange}
-					value={formData.description ?? ""}
+                    type="text"
+					name="personal_id"
+                    placeholder="Personal ID"
+                    onChange={handleChange}
+                    value={formData.personal_id}
                 />
                 <br />
 				{errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}

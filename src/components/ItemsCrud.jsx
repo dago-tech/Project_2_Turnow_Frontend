@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Loader from "./Loader";
 import Message from "./Message";
 import ItemsTable from "./ItemsTable";
-import api from "../axios";
+import api, { getData } from "../axios";
 
 const ItemsCrud = ({endpoint, displayField}) => {
     const [data, setData] = useState(null);
@@ -16,22 +15,17 @@ const ItemsCrud = ({endpoint, displayField}) => {
 
         setLoading(true);
         
-        const getData = async () => {
-            try {
-                const result = await api.get(endpoint);  // Reemplaza con tu ruta específica
-                setData(result.data);
-                setError(null);
-            } catch (error) {
-                setData(null);
-                setError(error);
-                console.error('Error in GET request:', error);
-                throw error;
-            } finally {
-                setLoading(false);
-            }
-        };  
-        getData();
-        }, []);
+        getData(endpoint).then(response => {
+            setData(response);
+            setError(null);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        }).finally(()=>{
+            setLoading(false);
+        });
+                
+    }, []);
 
 
     const deleteData = (id, name) => {
@@ -76,9 +70,7 @@ const ItemsCrud = ({endpoint, displayField}) => {
                     endpoint={endpoint}
                 />
             )}
-            <Link to={`/user/admin/${endpoint}create`}>
-                <button>Create</button>
-            </Link>
+            
         </div>
     );
 };

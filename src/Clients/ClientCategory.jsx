@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { getData } from '../axios';
+import { useContext } from 'react';
+import ClientContext from '../context/ClientContext';
+import { getData, postData } from '../axios';
 
 
 export function ClientCategory () {
 
+    const { setIdCategory } = useContext(ClientContext);
     const history = useNavigate();
     const [categories, setCategories] = useState([]);
     const [selected, setSelected] = useState('');
@@ -34,16 +36,20 @@ export function ClientCategory () {
     };
 
     const handleSubmit = () => {
+
+        setIdCategory(selected)
+
         history({
 			pathname: '/client/turn/',
-		}); 
+		});
     };
 
     return (
-        <div className='center'>
-            <h2>Select your category:</h2>
+        <>
+            <h2 style={{textAlign: 'center'}}>Select your category:</h2>
             <div style={{textAlign: 'left'}}>
-                <button 
+                <button
+                    className='back_button'
                     onClick={handlePreviousPage}
                 >
                     Back
@@ -63,11 +69,14 @@ export function ClientCategory () {
                 ))}
             </ul>
             <div style={{textAlign: 'right'}}>
-                <button onClick={handleSubmit} disabled={!selected}>
+                <button
+                    className='next_button'
+                    onClick={handleSubmit}
+                    disabled={!selected}
+                >
                     Next
                 </button>
             </div>
-            
-        </div>
+        </>
     );
 };

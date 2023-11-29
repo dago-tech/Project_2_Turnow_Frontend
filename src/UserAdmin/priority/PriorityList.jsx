@@ -4,12 +4,12 @@ import ItemsCrud from "../../components/ItemsCrud";
 export function PriorityList() {
   
     return (
-        <>            
-            <h1>List of priorities</h1>
+        <div className="center">            
+            <h1>Priority List</h1>
             <ItemsCrud
                 endpoint="priority/"
                 displayField= "name"
             />
-        </>
+        </div>
     )
 }

@@ -114,7 +114,7 @@ export function DeskCreateEdit({ edit }) {
 		}
 
 		history({
-			pathname: '/user/admin/desk/',
+			pathname: '/user_admin/desk/',
 		});
 		window.location.reload();
 	};
