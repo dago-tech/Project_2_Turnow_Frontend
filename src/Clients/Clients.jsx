@@ -4,7 +4,7 @@ import { ClientId } from "./ClientId";
 import { ClientPriority } from "./ClientPriority";
 import { ClientTurn } from "./ClientTurn";
 import { ClientCategory } from "./ClientCategory";
-import ClientContext, { ClientProvider } from '../context/ClientContext';
+import { ClientProvider } from '../context/ClientContext';
 
 
 export function Clients() {

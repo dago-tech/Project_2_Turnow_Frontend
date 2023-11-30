@@ -87,7 +87,7 @@ export function UserCreateEdit({ edit }) {
     };
 
     return ( 
-        <div>
+        <div className="center">
             <h1>Users update</h1>
             <form>
                 <label htmlFor="email">Email: </label>

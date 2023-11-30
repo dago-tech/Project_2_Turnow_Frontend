@@ -1,53 +1,55 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { postData } from '../axios';
+import { useContext } from 'react';
+import TurnContext from '../context/ManageTurnContext';
+import { putData } from '../axios';
+
 
 export function ServedTurn() {
     
-    const endpoint = 'turn/serve/1'
-    const [errorForm, setErrorForm] = useState('');
+    const endpoint = 'turn/served/1/'
+    const { servedMessage, setServedMessage, 
+        setNextMessage, setVerifyMessage } = useContext(TurnContext);
 
-    const handleNext = (e) => {
+    const defaultMessage = {
+        message: 'Waiting',
+        style: 'default'
+    }
+    const successMessage = {
+        message: 'Current turn has been marked as "served"',
+        style: 'success'
+    }
+    const errorMessage = {
+        message: 'There is an error',
+        style: 'error'
+    }
+
+
+    const handleSubmit = (e) => {
 		e.preventDefault();
-
-        if (false) {
-            setErrorForm('¡You did not fill out all the fields!');
-            return;
-        }        
-        // Clean ErrorForm if no validation issues
-        setErrorForm('');
 		
-		postData(endpoint).then(response => {
-            setData(response);
-            setError(null);
+		putData(endpoint).then(() => {
+            setServedMessage(successMessage);
+            setNextMessage(defaultMessage)
+            setVerifyMessage(defaultMessage)
         })
-        .catch(error => {
-            console.error('Error:', error);
+        .catch(() => {
+            setServedMessage(errorMessage);
         })
-		
-
-		history({
-			pathname: '/user_admin/desk/',
-		});
-		window.location.reload();
 	};
 
-    return (
-                
+    return (                
         <div>
-            <Link to="/verify">
-                <button 
-                    className='principal_button'
-                    onClick={handleNext}
-                >
-                    Call Next Turn
-                </button>
-            </Link>
+            <button 
+                className='principal_button'
+                onClick={handleSubmit}
+            >
+                Attention finished
+            </button>
         
             <div>
                 <h4>Message: </h4>
                 <br />
-                {errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}
+                <p className={servedMessage.style}>{servedMessage.message}</p>
             </div>
         </div>
     )

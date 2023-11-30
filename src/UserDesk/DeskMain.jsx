@@ -15,7 +15,6 @@ export function DeskMain() {
                         <li><Link to="/user_desk">Turn Management</Link></li>
                         <li><Link to="/user_desk/turn">Turns</Link></li>
                         <li><Link to="/user_desk/priority">Reiniciar conteo</Link></li>
-                        
                     </ul>
                 </nav>
             </div>
@@ -27,6 +26,5 @@ export function DeskMain() {
                 </Routes>
             </div>                
         </div>
-        
     )
 }

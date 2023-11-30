@@ -55,12 +55,11 @@ ul {
     font-size: 100px;
 }
 
-
 .turn_manage {
     margin-top: 5vw;
     display: grid;
     grid-template-columns: auto auto auto; /* Dos columnas de tamaño automático */
-    gap: 10px; /* Espacio entre las celdas, ajusta según sea necesario */
+    gap: 40px; /* Espacio entre las celdas, ajusta según sea necesario */
 }
 
 .default {

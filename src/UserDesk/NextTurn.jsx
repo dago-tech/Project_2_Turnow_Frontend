@@ -1,44 +1,54 @@
 import { useState } from 'react';
 import { putData } from '../axios';
+import { useContext } from 'react';
+import TurnContext from '../context/ManageTurnContext';
 import '../styles/main.css'
 
 
 export function NextTurn() {
     
     const endpoint = 'turn/serve/1/'
-    const [message, setMessage] = useState('Waiting');
-    const [messageStyle, setMessageStyle] = useState('default');
+    const { nextMessage, setNextMessage, 
+        setVerifyMessage, setServedMessage } = useContext(TurnContext);
 
-    const handleNext = (e) => {
+    const defaultMessage = {
+        message: 'Waiting',
+        style: 'default'
+    }
+    const successMessage = {
+        message: 'One turn has been required',
+        style: 'success'
+    }
+    const errorMessage = {
+        message: 'There are no pending turns',
+        style: 'error'
+    }
+
+    const handleSubmit = (e) => {
 		e.preventDefault();
 		
 		putData(endpoint).then(() => {
-            setMessage('One turn has been required');
-            setMessageStyle('success')
+            setNextMessage(successMessage);
+            setVerifyMessage(defaultMessage);
+            setServedMessage(defaultMessage);
         })
         .catch(() => {
-            setMessage('There are no pending turns');
-            setMessageStyle('error')
+            setNextMessage(errorMessage);
         })
-		
 	};
 
-    return (
-                
+    return (                
         <div>
-
             <button 
                 className='principal_button'
-                onClick={handleNext}
+                onClick={handleSubmit}
             >
                 Call Next Turn
-            </button>
-
-        
+            </button>        
             <div>
                 <h4>Message: </h4>
                 <br />
-                <p className={messageStyle}>{message}</p>
+                <p className={nextMessage.style}>{nextMessage.message}</p>
             </div>
         </div>
     )

@@ -124,7 +124,7 @@ export function DeskCreateEdit({ edit }) {
     };
 
     return ( 
-        <div>
+        <div className="center">
             <h1>Service Desk</h1>
             <form>
 			<label htmlFor="name">Name: </label>

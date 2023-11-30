@@ -71,7 +71,7 @@ export function CategoryCreateEdit({ edit }) {
     };
 
     return ( 
-        <div>
+        <div className="center">
             <h1>Category</h1>
             <form>
                 <label htmlFor="name">Name: </label>

@@ -75,3 +75,7 @@ git pull origin main --allow-unrelated-histories
 ```sh
 git push origin main
 ```
+
+__Missing__
+- When there is no clients pending to serve, check periodically for new clients in service desk screen.
+- When a service desk is logged in, it could send its id number to backend to make some operations.

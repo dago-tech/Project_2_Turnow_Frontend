@@ -13,6 +13,7 @@ import { ClientCreateEdit } from "./client/ClientCreateEdit";
 import { DeskCreateEdit } from "./desk/DeskCreateEdit";
 import { UserCreateEdit } from "./user/UserCreateEdit";
 import Login from "./Login";
+import { TurnCreateEdit } from "./turn/TurnCreateEdit";
 
 
 export function AdminMain() {
@@ -58,6 +59,8 @@ export function AdminMain() {
                     <Route path="/client/create" element={<ClientCreateEdit />} />
                     <Route path="/client/edit/:id" element={<ClientCreateEdit edit={true} />} />
                     <Route path="/turn" element={<TurnList />} />
+                    <Route path="/turn/create" element={<TurnCreateEdit />} />
+                    <Route path="/turn/edit/:id" element={<TurnCreateEdit edit={true} />} />
                     {/* <Route path="*" element={<Error404 />} /> */}
                 </Routes>
             </div>                

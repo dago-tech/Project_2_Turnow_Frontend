@@ -76,7 +76,7 @@ export function PriorityCreateEdit({ edit }) {
     };
 
     return ( 
-        <div>
+        <div className="center">
             <h1>Priority</h1>
             <form>
                 <label htmlFor="name">Name: </label>
@@ -97,6 +97,7 @@ export function PriorityCreateEdit({ edit }) {
 					value={formData.description ?? ""}
                 />
                 <br />
+				<label htmlFor="priority">Priority: </label>
 				<input
 					type="text"
 					name="priority"

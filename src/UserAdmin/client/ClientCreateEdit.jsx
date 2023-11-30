@@ -45,10 +45,10 @@ export function ClientCreateEdit({ edit }) {
 		e.preventDefault();
 		console.log(formData);
 
-		if (formData.personal_id=='') {
+		if (formData.personal_id=='' || formData.id_type=='') {
             setErrorForm('¡You did not fill out all the fields!');
             return;
-        }        
+        }
         // Clean ErrorForm if no validation issues
         setErrorForm('');
 		
@@ -73,7 +73,7 @@ export function ClientCreateEdit({ edit }) {
     };
 
     return ( 
-        <div>
+        <div className="center">
             <h1>Client</h1>
             <form>
 			<label htmlFor="id_type">ID type:</label>
@@ -82,8 +82,8 @@ export function ClientCreateEdit({ edit }) {
                     name="id_type"
                     value={formData.id_type}
                     onChange={handleChange}
-                >
-                    <option value="">Select...</option>                    
+                >   
+					<option value="">Select...</option>                
                     <option value="cedula">CC</option>
                     <option value="tarjeta_identidad">TI</option>
                     <option value="pasaporte">PA</option>

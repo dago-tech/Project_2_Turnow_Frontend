@@ -1,22 +1,42 @@
-import { Link } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { useState } from 'react';
+import { TurnProvider } from '../context/ManageTurnContext';
 import { VerifyTurn } from "./VerifyTurn";
 import { NextTurn } from "./NextTurn";
 import { ServedTurn } from "./ServedTurn";
 
+
 export function DeskManage() {
+
+    const initialMessage = {
+        message: 'Waiting',
+        style: 'default'
+    }
+    const [nextMessage, setNextMessage] = useState(initialMessage);
+    const [verifyMessage, setVerifyMessage] = useState(initialMessage);
+    const [servedMessage, setServedMessage] = useState(initialMessage);
+
+    const data = {
+        nextMessage,
+        setNextMessage,
+        verifyMessage,
+        setVerifyMessage,
+        servedMessage,
+        setServedMessage        
+    };
     
     return (
-        <div className="center">
-            <h1>Desk Management</h1>
+        <TurnProvider value={data}>
+            <div className="center">
+                <h1>Turn Management</h1>
 
-            <div className='turn_manage'>
-                <NextTurn/>
+                <div className='turn_manage'>
+                    <NextTurn/>
 
-                <VerifyTurn/>
+                    <VerifyTurn/>
 
-                <ServedTurn/>
+                    <ServedTurn/>
+                </div>
             </div>
-        </div>
+        </TurnProvider>
     )
 }
