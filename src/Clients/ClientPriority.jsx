@@ -41,8 +41,8 @@ export function ClientPriority () {
         setIdPriority(selected)
 
         history({
-			pathname: '/client/category/',
-		}); 
+			pathname: '/client/category/'
+		});
     };
 
     return (

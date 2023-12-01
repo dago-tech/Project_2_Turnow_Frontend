@@ -13,13 +13,13 @@ const ItemsTable = ({ data, displayField, deleteData, endpoint}) => {
             <table>
                 <thead>
                     <tr style={{textAlign: "right"}}>
-                        <td></td>
-                        <td></td>
-                        <td>
+                        <th className="no_borders"></th>
+                        <th className="no_borders"></th>
+                        <th className="no_borders" style={{textAlign: "right"}}>
                             <Link to={`/user_admin/${endpoint}create`}>
                                 <button>Create</button>
                             </Link>
-                        </td>                    
+                        </th>                    
                     </tr>
                     <tr>
                         <th>Id</th>

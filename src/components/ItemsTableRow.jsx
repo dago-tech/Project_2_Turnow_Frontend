@@ -7,7 +7,7 @@ const ItemsTableRow = ({ el, displayField, deleteData, endpoint}) => {
     let field = el[displayField]
     return (
         <tr>
-            <td style={{ width: '100px', textAlign: 'center'}}>{id}</td>
+            <td>{id}</td>
             <td>{field}</td>
             <td>
                 <Link to={`/user_admin/${endpoint}edit/${id}`}>
