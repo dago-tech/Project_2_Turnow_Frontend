@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import Loader from "./Loader";
 import Message from "./Message";
 import ItemsTable from "./ItemsTable";
-import api, { getData } from "../axios";
+import { getData, deleteData } from "../axios";
+
 
 const ItemsCrud = ({endpoint, displayField}) => {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    /*Creamos un efecto para que solo la primera vez que se carga el componente se 
-    haga la peticion fetch a la ulr */
     useEffect(() => {
 
         setLoading(true);
@@ -20,7 +19,7 @@ const ItemsCrud = ({endpoint, displayField}) => {
             setError(null);
         })
         .catch(error => {
-            console.error('Error:', error);
+            setError(error);
         }).finally(()=>{
             setLoading(false);
         });
@@ -28,7 +27,7 @@ const ItemsCrud = ({endpoint, displayField}) => {
     }, []);
 
 
-    const deleteData = (id, name) => {
+    const deleteRegister = (id, name) => {
 
         let isDelete = window.confirm(
             `¿Do you want to delete the register: ${name}?`
@@ -37,20 +36,15 @@ const ItemsCrud = ({endpoint, displayField}) => {
         if (isDelete) {
             let delete_endpoint = `${endpoint}delete/${id}`;
             
-            const deleteDataAux = async () => {
-                try {
-                    const result = await api.delete(delete_endpoint);  // Reemplaza con tu ruta específica
-                    let newData = data.filter((el) => el.id !== id);
-                    setData(newData);
-                    setError(null);
-                } catch (error) {
-                    setData(null);
-                    setError(error);
-                    console.error('Error in DELETE request:', error);
-                    throw error;
-                } 
-            };  
-            deleteDataAux();
+            deleteData(delete_endpoint).then(response => {
+                let newData = data.filter((el) => el.id !== id);
+                setData(newData);
+                setError(null);
+            })
+            .catch(error => {
+                setData(null);
+                setError(error);
+            })
         }
     };
 
@@ -66,11 +60,10 @@ const ItemsCrud = ({endpoint, displayField}) => {
                 <ItemsTable
                     data={data}
                     displayField={displayField}
-                    deleteData={deleteData}
+                    deleteData={deleteRegister}
                     endpoint={endpoint}
                 />
-            )}
-            
+            )} 
         </div>
     );
 };

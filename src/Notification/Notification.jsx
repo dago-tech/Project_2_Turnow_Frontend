@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getData } from "../axios";
-import ClientContext from '../context/ClientContext';
+import { useWebSocket } from '../context/WebSocketContext';
 
 
 export function Notification() {
@@ -9,15 +9,15 @@ export function Notification() {
 
     const [data, setData] = useState([])
     const [error, setError] = useState(null);
-    const { notificationChange } = useContext(ClientContext);
 
+    const { mensajeRecibido, notificationChange} = useWebSocket();
 
     useEffect(() => {
         
         getData(endpoint).then(response => {
             setData(response);
             setError(null);
-            console.log(notificationChange)
+            console.log('cambiando listado')
         })
         .catch(error => {
             console.error('Error:', error);
@@ -52,6 +52,7 @@ export function Notification() {
             {typeof data === 'object' && (
                 <p className="error">{data.message}</p>
             )}
+            <p>Mensaje Recibido: {mensajeRecibido}</p>
         </div>
     )
 }

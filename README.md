@@ -2,21 +2,20 @@
 
 Frontend of Turnow Project. A web application that manages turns in different kinds of stablishments, you type your personal ID to the system, take your turn number and wait for the call based on a priority defined by the app admin.
 
-- Creamos el proyecto en react, con
+- Create a react project using vite:
 ```sh
 npm create vite@latest Turnow -- --template react
 ```
 
-Dentro de la carpeta de proyecto creada damos:
+In project folder:
 
 ```sh
 npm install
 npm run dev
 ```
-- Instalamos:
+- Let's Install:
 
 npm install react-router-dom
-
 npm i axios
 
 
@@ -77,6 +76,6 @@ git push origin main
 ```
 
 __Missing__
-- When there is no clients pending to serve, check periodically for new clients in service desk screen.
+
 - When a service desk is logged in, it could send its id number to backend to make some operations.
 - Testing

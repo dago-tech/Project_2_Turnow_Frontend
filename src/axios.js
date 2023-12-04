@@ -58,6 +58,15 @@ export const patchData = async (endpoint, data) => {
 	}
 };
 
+export const deleteData = async (endpoint) => {
+	try {
+		await api.delete(endpoint);
+	} catch (error) {
+		console.error('Error in DELETE request:', error);
+		throw error;
+	}
+};
+
 
 //El siguiente codigo es para solicitar un nuevo access token cuando se haya vencido, esto
 // usando el refresh token.

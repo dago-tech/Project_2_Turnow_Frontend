@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const Message = ({ msg }) => {
   let styles = {
     padding: "1rem",
@@ -11,7 +12,6 @@ const Message = ({ msg }) => {
 
   return (
     <div style={styles}>
-      {/* <p>{msg}</p> */}
       <p dangerouslySetInnerHTML={{ __html: msg }} />
     </div>
   );

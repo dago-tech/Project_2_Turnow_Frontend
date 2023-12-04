@@ -14,7 +14,7 @@ export function ClientPriority () {
     const [selected, setSelected] = useState('');
 
     useEffect(() => {
-        // Realizar la solicitud a la API para obtener las categorías
+        // Get the priority list
 
         getData('priority/').then(response => {
             setPriorities(response,);

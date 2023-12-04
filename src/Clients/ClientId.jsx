@@ -88,7 +88,6 @@ export function ClientId () {
                 </div>
 
                 <div style={{textAlign: 'center', width: '200px'}}>
-                {/* style={{ display: 'flex', flexDirection: 'column' }} */}
                     <h2>Enter your ID number:</h2>
                     <div style={{ minHeight: '40px', width: '120px', border: '1px solid #ccc', 
                                 marginBottom: '10px', margin: 'auto'}}>
@@ -124,9 +123,7 @@ export function ClientId () {
                     </table>
                     </div>
                 </div>
-
-            </div>
-            
+            </div>       
             
             <div style={{ textAlign: 'right' }}>
                 <button

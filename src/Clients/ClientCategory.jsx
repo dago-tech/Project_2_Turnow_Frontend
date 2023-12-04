@@ -13,7 +13,7 @@ export function ClientCategory () {
     const [selected, setSelected] = useState('');
 
     useEffect(() => {
-        // Realizar la solicitud a la API para obtener las categorías
+        // Get the category list
 
         getData('category/').then(response => {
             setCategories(response,);

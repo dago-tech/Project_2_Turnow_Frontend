@@ -1,39 +1,57 @@
-import { useState } from 'react';
 import { TurnProvider } from '../context/ManageTurnContext';
 import { VerifyTurn } from "./VerifyTurn";
 import { NextTurn } from "./NextTurn";
 import { ServedTurn } from "./ServedTurn";
+import { useEffect, useState } from 'react';
+import { getData } from '../axios';
+import '../styles/main.css'
 
 
 export function DeskManage() {
 
     const initialMessage = {
-        message: 'Waiting',
-        style: 'default'
+        text: '',
+        style: 'error'
     }
-    const [nextMessage, setNextMessage] = useState(initialMessage);
-    const [verifyMessage, setVerifyMessage] = useState(initialMessage);
-    const [servedMessage, setServedMessage] = useState(initialMessage);
+    const [message, setMessage] = useState(initialMessage);
 
-    const data = {
-        nextMessage,
-        setNextMessage,
-        verifyMessage,
-        setVerifyMessage,
-        servedMessage,
-        setServedMessage        
-    };
+    useEffect(() =>{
+
+        const checkTurn = () => {
+            getData('turn/check/1').then(response => {
+
+                if (response.state) {
+                    setMessage({text: response.message, style: 'success'});
+                } else {
+                    setMessage({text: response.message, style: 'error'}); 
+                }
+                
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        checkTurn();
+
+        // Configurar un intervalo para realizar la petición cada 30 segundos
+        const intervalId = setInterval(checkTurn, 30000);
+
+        // Limpiar el intervalo al desmontar el componente
+        return () => clearInterval(intervalId);
+    }, [])
+
     
+
     return (
-        <TurnProvider value={data}>
+        <TurnProvider>
             <div className="center">
                 <h1>Turn Management</h1>
 
+                {message && <p className={message.style}>{message.text}</p>}
                 <div className='turn_manage'>
                     <NextTurn/>
-
                     <VerifyTurn/>
-
                     <ServedTurn/>
                 </div>
             </div>
