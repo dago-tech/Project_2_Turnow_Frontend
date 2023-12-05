@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { getData, patchData, postData } from '../../axios';
+import { getData, patchData, postData } from '../../helpers/axios';
 
 
 export function UserCreateEdit({ edit }) {

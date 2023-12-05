@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState } from "react";
 
 const ClientContext = createContext();
 
@@ -13,13 +13,11 @@ export const ClientProvider = ({ children }) => {
         idCategory,
         setIdCategory,
         idPriority,
-        setIdPriority
+        setIdPriority,
     };
     return (
-        <ClientContext.Provider value={data}>
-            {children}
-        </ClientContext.Provider>
+        <ClientContext.Provider value={data}>{children}</ClientContext.Provider>
     );
-}
+};
 
-export default ClientContext
+export default ClientContext;

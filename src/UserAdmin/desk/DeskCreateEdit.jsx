@@ -1,70 +1,72 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { getData, postData, putData } from '../../axios';
-import api from '../../axios';
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getData, postData, putData } from "../../helpers/axios";
+import api from "../../helpers/axios";
 
 export function DeskCreateEdit({ edit }) {
-
-    const endpoint = "desk/create/"
+    const endpoint = "desk/create/";
     const history = useNavigate();
-	const { id } = useParams();
-	const initialFormData = Object.freeze({
-        name: '',
-		state: true,
+    const { id } = useParams();
+    
+    const initialFormData = {
+        name: "",
+        state: true,
         busy: false,
-        user: '',
-        category: []
-	});
+        user: "",
+        category: [],
+    };
 
-	const [formData, setFormData] = useState(initialFormData);
-	const [userOptions, setUserOptions] = useState([]);
+    const [formData, setFormData] = useState(initialFormData);
+    const [userOptions, setUserOptions] = useState([]);
     const [categoryOptions, setCategoryOptions] = useState([]);
-    const [errorForm, setErrorForm] = useState('');
+    const [errorForm, setErrorForm] = useState("");
 
-	useEffect(() => {
-		getForeignKey('user/', setUserOptions);
-        getForeignKey('category/', setCategoryOptions);
-
+    useEffect(() => {
+        getForeignKey("user/", setUserOptions);
+        getForeignKey("category/", setCategoryOptions);
 
         if (edit) {
-			getData('desk/get/' + id).then(response => {
-				console.log(response);
-				setFormData({
-					...formData,
-					['name']: response.name,
-                    ['state']: response.state,
-                    ['busy']: response.busy,
-                    ['user']: response.user,
-                    ['category']: response.category,
-				});
-			})
-			.catch(error => {
-				console.error('Error:', error);
-			});		
-		}
-	}, []);
+            getData("desk/get/" + id)
+                .then((response) => {
+                    console.log(response);
+                    setFormData({
+                        ...formData,
+                        ["name"]: response.name,
+                        ["state"]: response.state,
+                        ["busy"]: response.busy,
+                        ["user"]: response.user,
+                        ["category"]: response.category,
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+    }, []);
 
-	const getForeignKey = async (endpoint, func) => {
+    const getForeignKey = async (endpoint, func) => {
         try {
             const response = await api.get(endpoint);
             func(response.data);
             console.log(response.data);
         } catch (error) {
-            console.error('Error getting user and category options:', error);
+            console.error("Error getting user and category options:", error);
         }
     };
 
-	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
-		});
-	};
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]:
+                e.target.type === "checkbox"
+                    ? e.target.checked
+                    : e.target.value,
+        });
+    };
 
-	const handleChangeFk = (e) => {
+    const handleChangeFk = (e) => {
         const { name, value } = e.target;
-        if (value=='') {
+        if (value == "") {
             setFormData({
                 ...formData,
                 [name]: value,
@@ -77,7 +79,7 @@ export function DeskCreateEdit({ edit }) {
         }
     };
 
-	const handleMultipleChange = (e) => {
+    const handleMultipleChange = (e) => {
         const { name, options } = e.target;
         const selectedValues = Array.from(options)
             .filter((option) => option.selected)
@@ -89,45 +91,48 @@ export function DeskCreateEdit({ edit }) {
         });
     };
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-        console.log(formData)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
 
-        if (formData.name=='' || !formData.user || formData.category.length==0) {
-            setErrorForm('¡You did not fill out all the fields!');
+        if (
+            formData.name == "" ||
+            !formData.user ||
+            formData.category.length == 0
+        ) {
+            setErrorForm("¡You did not fill out all the fields!");
             return;
-        }        
+        }
         // Clean ErrorForm if no validation issues
-        setErrorForm('');
-		
-		
-		if (edit) {
-			putData(`desk/update/` + id + '/', {
-				name: formData.name,
+        setErrorForm("");
+
+        if (edit) {
+            putData(`desk/update/` + id + "/", {
+                name: formData.name,
                 state: formData.state,
                 busy: formData.busy,
                 user: formData.user,
                 category: formData.category,
-			})	
-		} else {
-			postData(endpoint, formData)
-		}
+            });
+        } else {
+            postData(endpoint, formData);
+        }
 
-		history({
-			pathname: '/user_admin/desk/',
-		});
-		window.location.reload();
-	};
+        history({
+            pathname: "/user_admin/desk/",
+        });
+        window.location.reload();
+    };
 
     const handleReset = (e) => {
         setFormData(initialFormData);
     };
 
-    return ( 
+    return (
         <div className="center">
             <h1>Service Desk</h1>
             <form>
-			<label htmlFor="name">Name: </label>
+                <label htmlFor="name">Name: </label>
                 <input
                     type="text"
                     name="name"
@@ -135,7 +140,7 @@ export function DeskCreateEdit({ edit }) {
                     onChange={handleChange}
                     value={formData.name}
                 />
-                <br />                
+                <br />
                 <label htmlFor="user">User:</label>
                 <select
                     id="user"
@@ -143,7 +148,7 @@ export function DeskCreateEdit({ edit }) {
                     value={formData.user}
                     onChange={handleChangeFk}
                 >
-                    <option value=''>Select...</option>
+                    <option value="">Select...</option>
                     {userOptions.map((option) => (
                         <option key={option.id} value={option.id}>
                             {option.user_name}
@@ -159,37 +164,37 @@ export function DeskCreateEdit({ edit }) {
                     value={formData.category}
                     onChange={handleMultipleChange}
                 >
-                {categoryOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                        {option.name}
-                    </option>
-                ))}
+                    {categoryOptions.map((option) => (
+                        <option key={option.id} value={option.id}>
+                            {option.name}
+                        </option>
+                    ))}
                 </select>
                 <br />
                 <label>
-                <input
-                    type="checkbox"
-                    name="state"
-                    checked={formData.state}
-                    onChange={handleChange}
-                />
-                State
+                    <input
+                        type="checkbox"
+                        name="state"
+                        checked={formData.state}
+                        onChange={handleChange}
+                    />
+                    State
                 </label>
                 <br />
                 <label>
-                <input
-                    type="checkbox"
-                    name="busy"
-                    checked={formData.busy}
-                    onChange={handleChange}
-                />
-                Busy
+                    <input
+                        type="checkbox"
+                        name="busy"
+                        checked={formData.busy}
+                        onChange={handleChange}
+                    />
+                    Busy
                 </label>
                 <br />
-                {errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}
-				<input type="button" value="Send" onClick={handleSubmit} />
-				<input type="reset" value="Clear" onClick={handleReset} />
+                {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
+                <input type="button" value="Send" onClick={handleSubmit} />
+                <input type="reset" value="Clear" onClick={handleReset} />
             </form>
         </div>
-    )
+    );
 }

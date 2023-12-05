@@ -32,9 +32,13 @@ table {
     margin-bottom: 20px;
 }
   
-.no_borders {
+.no_side_borders {
     border-right: none;
     border-left: none;
+}
+
+.no_borders {
+    border: none;
 }
   
 td, th {

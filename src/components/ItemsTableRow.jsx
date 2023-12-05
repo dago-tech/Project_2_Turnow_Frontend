@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const ItemsTableRow = ({ el, displayField, deleteData, endpoint}) => {
+const ItemsTableRow = ({ el, displayField, deleteData, endpoint }) => {
+    let id = el["id"];
+    let field = el[displayField];
 
-    let id = el["id"]
-    let field = el[displayField]
     return (
         <tr>
             <td>{id}</td>

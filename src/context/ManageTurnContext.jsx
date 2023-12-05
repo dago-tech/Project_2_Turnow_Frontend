@@ -1,14 +1,13 @@
-import { createContext, useState } from 'react';
-
+import { createContext, useState } from "react";
 
 const TurnContext = createContext();
 
 export const TurnProvider = ({ children }) => {
-
     const initialMessage = {
-        message: 'Waiting',
-        style: 'default'
-    }
+        message: "Waiting",
+        style: "default",
+    };
+    
     const [nextMessage, setNextMessage] = useState(initialMessage);
     const [verifyMessage, setVerifyMessage] = useState(initialMessage);
     const [servedMessage, setServedMessage] = useState(initialMessage);
@@ -19,14 +18,10 @@ export const TurnProvider = ({ children }) => {
         verifyMessage,
         setVerifyMessage,
         servedMessage,
-        setServedMessage        
+        setServedMessage,
     };
 
-    return (
-        <TurnContext.Provider value={data}>
-            {children}
-        </TurnContext.Provider>
-    );
-}
+    return <TurnContext.Provider value={data}>{children}</TurnContext.Provider>;
+};
 
 export default TurnContext;

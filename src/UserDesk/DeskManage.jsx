@@ -1,47 +1,43 @@
-import { TurnProvider } from '../context/ManageTurnContext';
+import { TurnProvider } from "../context/ManageTurnContext";
 import { VerifyTurn } from "./VerifyTurn";
 import { NextTurn } from "./NextTurn";
 import { ServedTurn } from "./ServedTurn";
-import { useEffect, useState } from 'react';
-import { getData } from '../axios';
-import '../styles/main.css'
-
+import { useEffect, useState } from "react";
+import { getData } from "../helpers/axios";
+import "../styles/main.css";
 
 export function DeskManage() {
-
     const initialMessage = {
-        text: '',
-        style: 'error'
-    }
+        text: "",
+        style: "error",
+    };
     const [message, setMessage] = useState(initialMessage);
 
-    useEffect(() =>{
-
+    useEffect(() => {
         const checkTurn = () => {
-            getData('turn/check/1').then(response => {
-
-                if (response.state) {
-                    setMessage({text: response.message, style: 'success'});
-                } else {
-                    setMessage({text: response.message, style: 'error'}); 
-                }
-                
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
+            getData("turn/check/1")
+                .then((response) => {
+                    if (response.state) {
+                        setMessage({
+                            text: response.message,
+                            style: "success",
+                        });
+                    } else {
+                        setMessage({ text: response.message, style: "error" });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        };
 
         checkTurn();
 
-        // Configurar un intervalo para realizar la petición cada 30 segundos
         const intervalId = setInterval(checkTurn, 30000);
 
-        // Limpiar el intervalo al desmontar el componente
+        // Clear interval when component unmounted
         return () => clearInterval(intervalId);
-    }, [])
-
-    
+    }, []);
 
     return (
         <TurnProvider>
@@ -49,12 +45,12 @@ export function DeskManage() {
                 <h1>Turn Management</h1>
 
                 {message && <p className={message.style}>{message.text}</p>}
-                <div className='turn_manage'>
-                    <NextTurn/>
-                    <VerifyTurn/>
-                    <ServedTurn/>
+                <div className="turn_manage">
+                    <NextTurn />
+                    <VerifyTurn />
+                    <ServedTurn />
                 </div>
             </div>
         </TurnProvider>
-    )
+    );
 }

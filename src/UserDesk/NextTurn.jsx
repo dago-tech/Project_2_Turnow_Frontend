@@ -1,65 +1,61 @@
-import { putData } from '../axios';
-import { useContext } from 'react';
-import TurnContext from '../context/ManageTurnContext';
-import '../styles/main.css'
-import { useWebSocket } from '../context/WebSocketContext';
-
+import { putData } from "../helpers/axios";
+import { useContext } from "react";
+import TurnContext from "../context/ManageTurnContext";
+import "../styles/main.css";
+import { useWebSocket } from "../context/WebSocketContext";
 
 export function NextTurn() {
-    
-    const endpoint = 'turn/serve/1/'
-    const { nextMessage, setNextMessage, 
-        setVerifyMessage, setServedMessage,
-         } = useContext(TurnContext);
+    const endpoint = "turn/serve/1/";
+    const { nextMessage, setNextMessage, setVerifyMessage, setServedMessage } =
+        useContext(TurnContext);
 
-    const { enviarMensaje } = useWebSocket();
-
+    const { sendMessage } = useWebSocket();
 
     const defaultMessage = {
-        message: 'Waiting',
-        style: 'default'
-    }
+        message: "Waiting",
+        style: "default",
+    };
     const successMessage = {
-        message: 'One turn has been required',
-        style: 'success'
-    }
+        message: "One turn has been required",
+        style: "success",
+    };
     const errorMessage = {
-        message: 'There are no pending turns',
-        style: 'error'
-    }
+        message: "There are no pending turns",
+        style: "error",
+    };
 
-
-    const enviarMensaj = () => {
-        enviarMensaje('This message is used to trigger onmessage webSocket method');
+    //Update Turn Notification Table
+    const webSocketMessage = () => {
+        sendMessage(
+            "This message is used to trigger onmessage webSocket method"
+        );
     };
 
     const handleSubmit = (e) => {
-		e.preventDefault();
-		
-		putData(endpoint).then(() => {
-            setNextMessage(successMessage);
-            setVerifyMessage(defaultMessage);
-            setServedMessage(defaultMessage);
-        })
-        .catch(() => {
-            setNextMessage(errorMessage);
-        })
-	};
+        e.preventDefault();
 
-    return (                
+        putData(endpoint)
+            .then(() => {
+                setNextMessage(successMessage);
+                setVerifyMessage(defaultMessage);
+                setServedMessage(defaultMessage);
+            })
+            .catch(() => {
+                setNextMessage(errorMessage);
+            });
+    };
+
+    return (
         <div>
-            <button 
-                className='principal_button'
-                onClick={handleSubmit}
-            >
+            <button className="principal_button" onClick={handleSubmit}>
                 Call Next Turn
-            </button>        
+            </button>
             <div>
                 <h4>Message: </h4>
-                <button onClick={enviarMensaj}>Enviar Mensaje</button>
+                <button onClick={webSocketMessage}>Send Message</button>
                 <br />
                 <p className={nextMessage.style}>{nextMessage.message}</p>
             </div>
         </div>
-    )
+    );
 }
