@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { postData } from "../helpers/axios";
 import ClientContext from "../context/ClientContext";
 import "../styles/main.css";
+import BackButton from "../components/BackButton";
 
 export function ClientId() {
     const { setIdClient } = useContext(ClientContext);
@@ -44,6 +45,9 @@ export function ClientId() {
 
     return (
         <>
+            <div style={{ textAlign: "left" }}>
+                <BackButton/>
+            </div>
             <div className={"container"}>
                 <div style={{ margin: 20, textAlign: "right" }}>
                     <h2>Identification type:</h2>

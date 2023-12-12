@@ -3,10 +3,13 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 const WebSocketContext = createContext();
 
 export const WebSocketProvider = ({ children }) => {
+    
     const [notificationChange, setNotificationChange] = useState(false);
     const socketRef = useRef(null);
 
+
     useEffect(() => {
+
         socketRef.current = new WebSocket("ws://localhost:8000/ws/turnow/");
 
         socketRef.current.onmessage = () => {

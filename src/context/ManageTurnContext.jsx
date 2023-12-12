@@ -12,16 +12,19 @@ export const TurnProvider = ({ children }) => {
     const [verifyMessage, setVerifyMessage] = useState(initialMessage);
     const [servedMessage, setServedMessage] = useState(initialMessage);
 
+
     const data = {
         nextMessage,
         setNextMessage,
         verifyMessage,
         setVerifyMessage,
         servedMessage,
-        setServedMessage,
+        setServedMessage
     };
 
-    return <TurnContext.Provider value={data}>{children}</TurnContext.Provider>;
+    return <TurnContext.Provider value={data}>
+                {children}
+            </TurnContext.Provider>;
 };
 
 export default TurnContext;

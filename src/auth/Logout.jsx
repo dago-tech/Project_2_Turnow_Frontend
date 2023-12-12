@@ -14,5 +14,6 @@ export default function Logout() {
         api.defaults.headers["Authorization"] = null;
         history("/login");
     });
+    
     return <div>Logout</div>;
 }

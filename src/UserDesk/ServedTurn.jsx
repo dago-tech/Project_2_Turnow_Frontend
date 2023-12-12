@@ -1,9 +1,12 @@
 import { useContext } from "react";
 import TurnContext from "../context/ManageTurnContext";
 import { putData } from "../helpers/axios";
+import { useAuth } from "../context/AuthContext";
 
 export function ServedTurn() {
-    const endpoint = "turn/served/1/";
+    
+    const { thisDeskId } = useAuth()
+    const endpoint = `turn/served/${thisDeskId}/`;
 
     const {
         servedMessage,

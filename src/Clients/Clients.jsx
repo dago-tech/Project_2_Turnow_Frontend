@@ -9,7 +9,6 @@ export function Clients() {
     return (
         <>
             <ClientProvider>
-                <h1>CLIENTS</h1>
                 <Routes>
                     <Route index element={<ClientId />} />
                     <Route path="/priority" element={<ClientPriority />} />

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../helpers/axios";
+import api, { getData, postData } from "../helpers/axios";
+import { useAuth } from "../context/AuthContext";
+
 
 const Login = () => {
 
@@ -11,6 +13,8 @@ const Login = () => {
 	};
 
 	const [formData, updateFormData] = useState(initialFormData);
+    const [errorForm, setErrorForm] = useState('');
+    const { setUserId, setIsAuthenticated, setIsAdmin} = useAuth();
 
 	const handleChange = (e) => {
 		updateFormData({
@@ -21,23 +25,39 @@ const Login = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(formData);
 
-		api
-			.post(`token/`, {
+        if (formData.email == "" || formData.password == "") {
+            setErrorForm("¡You did not fill out all the fields!");
+            return;
+        }
+        // Clean ErrorForm if no validation issues
+        setErrorForm("");
+
+		postData(`token/`, {
 				email: formData.email,
 				password: formData.password,
-			})
-			//Get the two tokens and send them to localStorage
-			.then((res) => {
-				localStorage.setItem('access_token', res.data.access);
-				localStorage.setItem('refresh_token', res.data.refresh);
-				api.defaults.headers['Authorization'] =
-					'JWT ' + localStorage.getItem('access_token');
-				history('/home');
-				//console.log(res);
-				//console.log(res.data);
-			});
+        })
+        //Get the two tokens and send them to localStorage
+        .then((response) => {
+            localStorage.setItem('access_token', response.access);
+            localStorage.setItem('refresh_token', response.refresh);
+            api.defaults.headers['Authorization'] =
+                'JWT ' + localStorage.getItem('access_token');
+            history('/home');
+            setIsAuthenticated(true)
+            const token = response.access
+            const tokenParts = JSON.parse(atob(token.split(".")[1]));
+            setUserId(tokenParts.user_id)
+
+            return getData(`user/is_admin/${tokenParts.user_id}/`)
+        
+        }).then((response)=>{
+            console.log(`Is admin: ${response}`)
+            setIsAdmin(response)
+        }).catch((error)=>{
+            console.log(error)
+            setErrorForm(error.response.data.detail)
+        });
 	};
 
     return (
@@ -68,6 +88,7 @@ const Login = () => {
                 <br />
                 <button type="submit">Login</button>
             </form>
+            {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
         </div>
     );
 };

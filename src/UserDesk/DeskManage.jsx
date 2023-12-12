@@ -1,21 +1,26 @@
-import { TurnProvider } from "../context/ManageTurnContext";
 import { VerifyTurn } from "./VerifyTurn";
 import { NextTurn } from "./NextTurn";
 import { ServedTurn } from "./ServedTurn";
 import { useEffect, useState } from "react";
+import { TurnProvider } from "../context/ManageTurnContext";
 import { getData } from "../helpers/axios";
 import "../styles/main.css";
+import { useAuth } from "../context/AuthContext";
+
 
 export function DeskManage() {
     const initialMessage = {
         text: "",
         style: "error",
     };
+
     const [message, setMessage] = useState(initialMessage);
+    const { thisDeskId } = useAuth();
 
     useEffect(() => {
+        
         const checkTurn = () => {
-            getData("turn/check/1")
+            getData(`turn/check/${thisDeskId}`)
                 .then((response) => {
                     if (response.state) {
                         setMessage({
@@ -33,24 +38,23 @@ export function DeskManage() {
 
         checkTurn();
 
-        const intervalId = setInterval(checkTurn, 30000);
+        const intervalId = setInterval(checkTurn, 10000);
 
-        // Clear interval when component unmounted
+        //Clear interval when component unmounted
         return () => clearInterval(intervalId);
     }, []);
 
     return (
-        <TurnProvider>
-            <div className="center">
-                <h1>Turn Management</h1>
-
-                {message && <p className={message.style}>{message.text}</p>}
-                <div className="turn_manage">
+        <div className="center">
+            <h1>Turn Management</h1>
+            {message && <p className={message.style}>{message.text}</p>}
+            <div className="turn_manage">
+                <TurnProvider>
                     <NextTurn />
                     <VerifyTurn />
                     <ServedTurn />
-                </div>
+                </TurnProvider>
             </div>
-        </TurnProvider>
+        </div>
     );
 }

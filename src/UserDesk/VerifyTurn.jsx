@@ -3,12 +3,15 @@ import { useContext } from "react";
 import TurnContext from "../context/ManageTurnContext";
 import { useWebSocket } from "../context/WebSocketContext";
 import { putData } from "../helpers/axios";
+import { useAuth } from "../context/AuthContext";
 import "../styles/main.css";
 
 export function VerifyTurn() {
-    const endpoint = "turn/serving/1/";
+    
     const { verifyMessage, setVerifyMessage } = useContext(TurnContext);
     const { sendMessage } = useWebSocket();
+    const { thisDeskId } = useAuth();
+    const endpoint = `turn/serving/${thisDeskId}/`;
 
     const successMessage = {
         message: "Turn has been verified",

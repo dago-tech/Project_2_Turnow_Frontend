@@ -13,6 +13,7 @@ import { ClientCreateEdit } from "./client/ClientCreateEdit";
 import { DeskCreateEdit } from "./desk/DeskCreateEdit";
 import { UserCreateEdit } from "./user/UserCreateEdit";
 import { TurnCreateEdit } from "./turn/TurnCreateEdit";
+import BackButton from "../components/BackButton";
 
 export function AdminMain() {
     return (
@@ -21,6 +22,9 @@ export function AdminMain() {
                 <h2>Admin menu</h2>
                 <nav>
                     <ul>
+                        <li>
+                            <Link to="/home">Home</Link>
+                        </li>
                         <li>
                             <Link to="/user_admin/user">Users</Link>
                         </li>
@@ -53,6 +57,7 @@ export function AdminMain() {
             {/* flex: 1 and flex: 5 means total width will be divided into 6 sections */}
             {/* 1vw viewport width represents 1% of browser width */}
             <div style={{ flex: 5, marginRight: "15vw" }}>
+                <BackButton/>
                 <Routes>
                     <Route path="/user" element={<UserList />} />
                     <Route

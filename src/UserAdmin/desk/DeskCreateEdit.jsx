@@ -113,9 +113,20 @@ export function DeskCreateEdit({ edit }) {
                 busy: formData.busy,
                 user: formData.user,
                 category: formData.category,
-            });
+            }).then()
+            .catch((error) => {
+                    setErrorForm("Check if this user has not been assigned to other service desk");
+                    return;
+                }                
+            );
         } else {
-            postData(endpoint, formData);
+            postData(endpoint, formData)
+            .then()
+            .catch((error) => {
+                    setErrorForm("Check if this user has not been assigned to other service desk");
+                    return;
+                }
+            );
         }
 
         history({

@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ClientContext from "../context/ClientContext";
 import { getData } from "../helpers/axios";
+import BackButton from "../components/BackButton";
 
 export function ClientPriority() {
     const { setIdPriority } = useContext(ClientContext);
@@ -23,13 +24,6 @@ export function ClientPriority() {
             });
     }, []);
 
-    const handlePreviousPage = () => {
-        history({
-            pathname: "/client/",
-        });
-        window.location.reload();
-    };
-
     const handleSelection = (priority_id) => {
         setSelected(priority_id);
     };
@@ -43,13 +37,11 @@ export function ClientPriority() {
     };
 
     return (
-        <>
-            <h2 style={{ textAlign: "center" }}>Select a priority:</h2>
+        <>  
             <div style={{ textAlign: "left" }}>
-                <button className="back_button" onClick={handlePreviousPage}>
-                    Back
-                </button>
+                <BackButton/>
             </div>
+            <h2 style={{ textAlign: "center" }}>Select a priority:</h2>
             <ul style={{ textAlign: "center" }}>
                 {priorities.map((priority) => (
                     <li key={priority.id}>

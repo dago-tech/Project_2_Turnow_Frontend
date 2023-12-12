@@ -3,11 +3,14 @@ import { useContext } from "react";
 import TurnContext from "../context/ManageTurnContext";
 import "../styles/main.css";
 import { useWebSocket } from "../context/WebSocketContext";
+import { useAuth } from "../context/AuthContext";
 
 export function NextTurn() {
-    const endpoint = "turn/serve/1/";
+    
     const { nextMessage, setNextMessage, setVerifyMessage, setServedMessage } =
         useContext(TurnContext);
+    const { thisDeskId } = useAuth();
+    const endpoint = `turn/serve/${thisDeskId}/`;
 
     const { sendMessage } = useWebSocket();
 

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import ClientContext from "../context/ClientContext";
-import { getData, postData } from "../helpers/axios";
+import { getData } from "../helpers/axios";
+import BackButton from "../components/BackButton";
 
 export function ClientCategory() {
     const { setIdCategory } = useContext(ClientContext);
@@ -22,13 +23,6 @@ export function ClientCategory() {
             });
     }, []);
 
-    const handlePreviousPage = () => {
-        history({
-            pathname: "/client/priority",
-        });
-        window.location.reload();
-    };
-
     const handleSelection = (category_id) => {
         setSelected(category_id);
     };
@@ -43,12 +37,10 @@ export function ClientCategory() {
 
     return (
         <>
-            <h2 style={{ textAlign: "center" }}>Select your category:</h2>
             <div style={{ textAlign: "left" }}>
-                <button className="back_button" onClick={handlePreviousPage}>
-                    Back
-                </button>
+                <BackButton/>
             </div>
+            <h2 style={{ textAlign: "center" }}>Select your category:</h2>
 
             <ul style={{ textAlign: "center" }}>
                 {categories.map((category) => (
