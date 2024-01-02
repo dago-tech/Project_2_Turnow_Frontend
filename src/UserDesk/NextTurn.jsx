@@ -29,19 +29,19 @@ export function NextTurn() {
 
     //Update Turn Notification Table
     const webSocketMessage = () => {
+        console.log("Websocket message")
         sendMessage(
             "This message is used to trigger onmessage webSocket method"
         );
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
+    const handleSubmit = () => {
         putData(endpoint)
             .then(() => {
                 setNextMessage(successMessage);
                 setVerifyMessage(defaultMessage);
                 setServedMessage(defaultMessage);
+                webSocketMessage()
             })
             .catch(() => {
                 setNextMessage(errorMessage);

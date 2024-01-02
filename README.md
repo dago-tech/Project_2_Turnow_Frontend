@@ -9,6 +9,7 @@ Frontend of Turnow Project. A web application that manages turns in different ki
 
 __Missing__
 
+- In a Desk, when State=True, application will let users to serve clients
 - Reset turn counting
 - Place startup component in user-admin
 - Testing

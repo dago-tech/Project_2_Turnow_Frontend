@@ -8,11 +8,15 @@ import "../styles/main.css";
 
 export function VerifyTurn() {
     
-    const { verifyMessage, setVerifyMessage } = useContext(TurnContext);
+    const { verifyMessage, setVerifyMessage, setServedMessage } = useContext(TurnContext);
     const { sendMessage } = useWebSocket();
     const { thisDeskId } = useAuth();
     const endpoint = `turn/serving/${thisDeskId}/`;
-
+    
+    const defaultMessage = {
+        message: "Waiting",
+        style: "default",
+    };
     const successMessage = {
         message: "Turn has been verified",
         style: "success",
@@ -23,9 +27,9 @@ export function VerifyTurn() {
         style: "error",
     };
 
-    const initialData = Object.freeze({
+    const initialData = {
         turn_number: "",
-    });
+    };
 
     const [data, setData] = useState(initialData);
     const [error, setError] = useState("");
@@ -38,7 +42,6 @@ export function VerifyTurn() {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
 
         if (data.turn_number == "") {
             setError("¡Field is empty!");
@@ -50,6 +53,7 @@ export function VerifyTurn() {
         putData(endpoint, data)
             .then(() => {
                 setVerifyMessage(successMessage);
+                setServedMessage(defaultMessage);
                 setData(initialData);
                 //Update Turn Notification Table
                 sendMessage(

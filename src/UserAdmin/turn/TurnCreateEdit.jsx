@@ -37,7 +37,7 @@ export function TurnCreateEdit({ edit }) {
                         ["personal_id"]: response.personal_id,
                         ["category"]: response.category,
                         ["priority"]: response.priority,
-                        ["desk"]: response.desk,
+                        ["desk"]: response.desk || "",
                     });
                 })
                 .catch((error) => {

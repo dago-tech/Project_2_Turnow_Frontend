@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://127.0.0.1:8000/api/";
+const baseURL = "https://localhost/api/";
 
 const api = axios.create({
     baseURL: baseURL,
@@ -107,9 +107,12 @@ api.interceptors.response.use(
 			const refreshToken = localStorage.getItem('refresh_token');
             console.log('Entró al if de Unauthorized')
 			if (refreshToken) {
+				//atob decodes a base64-encoded string
+				//Decode information from the payload into an object, some metadata as exp time
 				const tokenParts = JSON.parse(atob(refreshToken.split('.')[1]));
                 console.log(tokenParts)
-				// exp date in token is expressed in seconds, while now() returns milliseconds:
+				// exp date in token is expressed in seconds, while now() returns milliseconds
+				// Round up Date.now
 				const now = Math.ceil(Date.now() / 1000);
                 console.log(now)
 				console.log(tokenParts.exp);
@@ -133,6 +136,7 @@ api.interceptors.response.use(
 						});
 				} else {
 					console.log('Refresh token is expired', tokenParts.exp, now);
+					//Redirecting
 					window.location.href = '/login/';
 				}
 			} else {

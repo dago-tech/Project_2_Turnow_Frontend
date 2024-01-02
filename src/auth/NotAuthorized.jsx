@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const NotAuthorizated = () => {
+const NotAuthorized = () => {
 
     const history = useNavigate();
 
@@ -16,9 +16,10 @@ const NotAuthorizated = () => {
 
     return (
         <div>
-            <p className="error">You are not authorized, log in as an Administrator or Desk User</p>
+            <p className="error">You are not authorized, log in as an Administrator 
+            or Desk User</p>
         </div>
     )
 }
 
-export default NotAuthorizated;
+export default NotAuthorized;

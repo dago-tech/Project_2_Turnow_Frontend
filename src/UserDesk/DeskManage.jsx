@@ -18,7 +18,7 @@ export function DeskManage() {
     const { thisDeskId } = useAuth();
 
     useEffect(() => {
-        
+        //Check for new turns (system call for a new client to serve when desk user press "Call")
         const checkTurn = () => {
             getData(`turn/check/${thisDeskId}`)
                 .then((response) => {

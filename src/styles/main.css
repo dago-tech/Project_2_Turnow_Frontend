@@ -9,6 +9,11 @@ body {
     gap: 10px; /* Espacio entre las celdas, ajusta según sea necesario */
 }
 
+.my-header {
+    display: flex;
+    justify-content: space-between;
+}
+
 .selected {
     background-color: #93cc95;
 }

@@ -1,19 +1,11 @@
 import { Link } from "react-router-dom";
+import { Header } from "./Header";
 
 export function Home() {
 
     return (
         <>
-            <header>
-                <ul className="header-list">
-                    <li>
-                        <Link to="/login">Login</Link>
-                    </li>
-                    <li>
-                        <Link to="/logout">Logout</Link>
-                    </li>
-                </ul>
-            </header>
+            <Header/>
         
             <div style={{ textAlign: "center" }}>
                 <h1 style={{ margin: "70px" }}>TURNOW</h1>
