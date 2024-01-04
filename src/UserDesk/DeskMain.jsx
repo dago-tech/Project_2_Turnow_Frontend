@@ -74,12 +74,16 @@ export function DeskMain() {
                             <Link to="/user_desk">Turn Management</Link>
                         </li>
                         <li>
-                            <Link to="/user_desk/turn">Turns</Link>
+                            <Link to="/user_desk/turn">Turns List</Link>
                         </li>
-
+                        <li>
+                            <Link to="/notification">Turn notification</Link>
+                        </li>
+                        <br />
                         <li>
                             <Link to="/logout">Logout</Link>
                         </li>
+                        <br />
                         <li>
                             <button onClick={restartTurn}>
                                 Restart turn number

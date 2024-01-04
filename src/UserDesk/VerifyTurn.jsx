@@ -37,6 +37,13 @@ export function VerifyTurn() {
     const [data, setData] = useState(initialData);
     const [error, setError] = useState("");
 
+    //Update Turn Notification Table
+    const webSocketMessage = () => {
+        sendMessage(
+            "This message is used to trigger onmessage webSocket method"
+        );
+    };
+
     const handleChange = (e) => {
         setData({
             ...data,
@@ -57,10 +64,8 @@ export function VerifyTurn() {
                 setVerifyMessage(successMessage);
                 setServedMessage(defaultMessage);
                 setData(initialData);
-                //Update Turn Notification Table
-                sendMessage(
-                    "This message is used to trigger onmessage webSocket method"
-                );
+                webSocketMessage();
+                setError(null);
             })
             .catch((error) => {
                 setVerifyMessage(null);

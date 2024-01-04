@@ -4,6 +4,7 @@ import { getData, postData } from "../helpers/axios";
 import { useAuth } from "../context/AuthContext";
 import { setCookie } from "../helpers/cookies";
 import { errorMessage } from "../helpers/errorMessage";
+import "../styles/main.css";
 
 const Login = () => {
     const history = useNavigate();
@@ -13,7 +14,7 @@ const Login = () => {
     };
 
     const [formData, updateFormData] = useState(initialFormData);
-    const [errorForm, setErrorForm] = useState("");
+    const [error, setError] = useState("");
     const { setUserId, setIsAuthenticated, setIsAdmin, setUserEmail } =
         useAuth();
 
@@ -28,11 +29,11 @@ const Login = () => {
         e.preventDefault();
 
         if (formData.email == "" || formData.password == "") {
-            setErrorForm("¡You did not fill out all the fields!");
+            setError("¡You did not fill out all the fields!");
             return;
         }
         // Clean errorForm if no validation issues
-        setErrorForm("");
+        setError("");
 
         postData("token/", {
             email: formData.email,
@@ -56,8 +57,8 @@ const Login = () => {
                 setUserEmail(response.email);
                 setCookie("userEmail", response.email, 1);
             })
-            .catch((error) =>{
-                setErrorForm(errorMessage(error));
+            .catch((error) => {
+                setError(errorMessage(error));
             });
     };
 
@@ -89,7 +90,7 @@ const Login = () => {
                 </label>
                 <button type="submit">Login</button>
             </form>
-            {errorForm && <p className="error">{errorForm}</p>}
+            {error && <p className="error">{error}</p>}
         </div>
     );
 };

@@ -1,112 +1,135 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { getData, patchData, postData } from '../../helpers/axios';
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getData, patchData, postData } from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 
 export function UserCreateEdit({ edit }) {
     /* Shows a form to create o edit a User register */
 
-    const endpoint = "user/create/"
+    const endpoint = "user/create/";
     const history = useNavigate();
-	const { id } = useParams();
-	const initialFormData = Object.freeze({
-		email: '',
-        password: '',
-        user_name: '',
-        first_name: '',
-        last_name: '',
+    const { id } = useParams();
+    const initialFormData = {
+        email: "",
+        password: "",
+        user_name: "",
+        first_name: "",
+        last_name: "",
         is_admin: false,
-        is_active: true
-	});
+        is_active: true,
+    };
 
-	const [formData, setFormData] = useState(initialFormData);
-    const [errorForm, setErrorForm] = useState('');
+    const [formData, setFormData] = useState(initialFormData);
+    const [error, setError] = useState("");
 
-	useEffect(() => {
-
+    useEffect(() => {
         if (edit) {
-			getData('user/get/' + id).then(response => {
-				setFormData({
-					...formData,
-					['email']: response.email,
-                    ['user_name']: response.user_name,
-                    ['first_name']: response.first_name,
-                    ['last_name']: response.last_name,
-                    ['is_admin']: response.is_admin,
-                    ['is_active']: response.is_active
-				});
-			})
-			.catch(error => {
-				console.error('Error:', error);
-			});		
-		}
-	}, []);
+            getData("user/get/" + id)
+                .then((response) => {
+                    setFormData({
+                        ...formData,
+                        ["email"]: response.email,
+                        ["user_name"]: response.user_name,
+                        ["first_name"]: response.first_name,
+                        ["last_name"]: response.last_name,
+                        ["is_admin"]: response.is_admin,
+                        ["is_active"]: response.is_active,
+                    });
+                })
+                .catch((error) => {
+                    setError(errorMessage(error));
+                });
+        }
+    }, []);
 
-	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
-		});
-	};
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]:
+                e.target.type === "checkbox"
+                    ? e.target.checked
+                    : e.target.value,
+        });
+    };
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-        if (edit && (formData.email=='' || formData.user_name==''
-            || formData.first_name=='' || formData.last_name=='')) {
-            setErrorForm('¡You did not fill out all the fields!');
+    const handleSubmit = () => {
+        if (
+            edit &&
+            (formData.email == "" ||
+                formData.user_name == "" ||
+                formData.first_name == "" ||
+                formData.last_name == "")
+        ) {
+            setError("¡You did not fill out all the fields!");
             return;
-        } else if (!edit && (formData.email=='' || formData.user_name==''
-            || formData.first_name=='' || formData.last_name=='' || formData.password=='')) {
-            setErrorForm('¡You did not fill out all the fields!');
-            return
+        } else if (
+            !edit &&
+            (formData.email == "" ||
+                formData.user_name == "" ||
+                formData.first_name == "" ||
+                formData.last_name == "" ||
+                formData.password == "")
+        ) {
+            setError("¡You did not fill out all the fields!");
+            return;
         }
         // Clean ErrorForm if no validation issues
-        setErrorForm('');		
-		
-		if (edit) {
-			patchData(`user/update/` + id + '/', {
-				email: formData.email,
+        setError("");
+
+        if (edit) {
+            patchData(`user/update/` + id + "/", {
+                email: formData.email,
                 user_name: formData.user_name,
                 first_name: formData.first_name,
                 last_name: formData.last_name,
                 is_admin: formData.is_admin,
-                is_active: formData.is_active
-			})	
-		} else {
-			postData(endpoint, formData)
-		}
+                is_active: formData.is_active,
+            })
+                .then(() => {
+                    history({
+                        pathname: "/user_admin/user/",
+                    });
+                })
+                .catch((error) => {
+                    setError(errorMessage(error));
+                });
+        } else {
+            postData(endpoint, formData)
+                .then(() => {
+                    history({
+                        pathname: "/user_admin/user/",
+                    });
+                })
+                .catch((error) => {
+                    setError(errorMessage(error));
+                });
+        }
+    };
 
-		history({
-			pathname: '/user_admin/user/',
-		});
-		window.location.reload();
-	};
-
-    const handleReset = (e) => {
+    const handleReset = () => {
         setFormData(initialFormData);
     };
 
-    return ( 
+    return (
         <div className="center">
             <h1>Users update</h1>
             <form>
                 <label htmlFor="email">Email: </label>
                 <input
-					type="text"
-					name="email"
-					placeholder="Email"
-					onChange={handleChange}
-					value={formData.email}
+                    type="text"
+                    name="email"
+                    placeholder="Email"
+                    onChange={handleChange}
+                    value={formData.email}
                 />
                 <br />
                 <label htmlFor="user_name">User name: </label>
                 <input
-					type="text"
-					name="user_name"
-					placeholder="User name"
-					onChange={handleChange}
-					value={formData.user_name}
+                    type="text"
+                    name="user_name"
+                    placeholder="User name"
+                    onChange={handleChange}
+                    value={formData.user_name}
                 />
                 <br />
                 {!edit && (
@@ -118,11 +141,12 @@ export function UserCreateEdit({ edit }) {
                             placeholder="Password"
                             name="password"
                             value={formData.password}
-                            onChange={handleChange} />
+                            onChange={handleChange}
+                        />
                         <br />
                     </>
-                )}                
-				<label htmlFor="first_name">First name: </label>
+                )}
+                <label htmlFor="first_name">First name: </label>
                 <input
                     type="text"
                     name="first_name"
@@ -141,29 +165,29 @@ export function UserCreateEdit({ edit }) {
                 />
                 <br />
                 <label>
-                <input
-                    type="checkbox"
-                    name="is_admin"
-                    checked={formData.is_admin}
-                    onChange={handleChange}
-                />
-                Is admin
+                    <input
+                        type="checkbox"
+                        name="is_admin"
+                        checked={formData.is_admin}
+                        onChange={handleChange}
+                    />
+                    Is admin
                 </label>
                 <br />
                 <label>
-                <input
-                    type="checkbox"
-                    name="is_active"
-                    checked={formData.is_active}
-                    onChange={handleChange}
-                />
-                Is active
+                    <input
+                        type="checkbox"
+                        name="is_active"
+                        checked={formData.is_active}
+                        onChange={handleChange}
+                    />
+                    Is active
                 </label>
                 <br />
-                {errorForm && <p style={{ color: 'red' }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
+            {error && <p className="error">{error}</p>}
         </div>
-    )
+    );
 }

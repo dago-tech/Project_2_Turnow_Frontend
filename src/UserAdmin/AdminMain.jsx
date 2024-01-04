@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
+import { AdminHome } from "./AdminHome";
 import { UserList } from "./user/UserList";
 import { CategoryList } from "./category/CategoryList";
 import { PriorityList } from "./priority/PriorityList";
 import { DeskList } from "./desk/DeskList";
 import { TurnList } from "./turn/TurnList";
-import { Error404 } from "../components/Error404";
 import { ClientList } from "./client/ClientList";
 import { CategoryCreateEdit } from "./category/CategoryCreateEdit";
 import { PriorityCreateEdit } from "./priority/PriorityCreateEdit";
@@ -14,6 +14,7 @@ import { DeskCreateEdit } from "./desk/DeskCreateEdit";
 import { UserCreateEdit } from "./user/UserCreateEdit";
 import { TurnCreateEdit } from "./turn/TurnCreateEdit";
 import BackButton from "../components/BackButton";
+
 
 export function AdminMain() {
     /* Shows the admin main page, an admin user will be able to create and edit registers of
@@ -38,13 +39,13 @@ export function AdminMain() {
                             <Link to="/user_admin/priority">Priorities</Link>
                         </li>
                         <li>
-                            <Link to="/user_admin/desk">Services desk</Link>
+                            <Link to="/user_admin/desk">Service desks</Link>
                         </li>
                         <li>
                             <Link to="/user_admin/client">Clients</Link>
                         </li>
                         <li>
-                            <Link to="/user_admin/turn">Turns</Link>
+                            <Link to="/user_admin/turn">Turns List</Link>
                         </li>
                         <br />
                         <li>
@@ -62,6 +63,7 @@ export function AdminMain() {
             <div style={{ flex: 5, marginRight: "15vw" }}>
                 <BackButton/>
                 <Routes>
+                    <Route path="/" element={<AdminHome />} />
                     <Route path="/user" element={<UserList />} />
                     <Route
                         path="/user/edit/:id"

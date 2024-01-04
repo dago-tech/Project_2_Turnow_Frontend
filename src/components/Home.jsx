@@ -23,12 +23,12 @@ export function Home() {
                 <br />
                 <br />
                 <Link to="/user_admin">
-                    <button className="principal_button">User - Admin</button>
+                    <button className="principal_button">Admin User</button>
                 </Link>
                 <br />
                 <br />
                 <Link to="/user_desk">
-                    <button className="principal_button">User - Desk</button>
+                    <button className="principal_button">Desk User</button>
                 </Link>
             </div>
         </>

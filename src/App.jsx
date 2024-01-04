@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { WebSocketProvider } from "./context/WebSocketContext";
+import { AuthProvider } from "./context/AuthContext";
 import { Home } from "./components/Home";
+import PrivateRoute from "./auth/PrivateRoute";
 import Login from "./auth/Login";
+import Logout from "./auth/Logout";
 import { Notification } from "./Notification/Notification";
 import { Clients } from "./Clients/Clients";
 import { DeskMain } from "./UserDesk/DeskMain";
 import { AdminMain } from "./UserAdmin/AdminMain";
-import { WebSocketProvider } from "./context/WebSocketContext";
-import Logout from "./auth/Logout";
-import { AuthProvider } from "./context/AuthContext";
-import PrivateRoute from "./auth/PrivateRoute";
 
 
 function App() {
@@ -37,7 +37,6 @@ function App() {
                                 <Route path="/logout" element={<Logout />} />
                                 <Route path="/" element={<Navigate to="/home" />} />
                                 <Route path="*" element={<Navigate to="/home" />} />
-                                {/* <Route path="*" element={<Error404/>} /> */}
                             </Routes>
                         </BrowserRouter>
                 </AuthProvider>

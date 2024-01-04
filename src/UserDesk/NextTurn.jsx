@@ -40,7 +40,8 @@ export function NextTurn() {
                 setNextMessage(successMessage);
                 setVerifyMessage(defaultMessage);
                 setServedMessage(defaultMessage);
-                webSocketMessage()
+                webSocketMessage();
+                setError(null);
             })
             .catch((error) => {
                 setNextMessage(null);
@@ -58,7 +59,9 @@ export function NextTurn() {
             <div>
                 <h4>Message: </h4>
                 {/* <button onClick={webSocketMessage}>Send Message</button> */}
-                {nextMessage && <p className={nextMessage.style}>{nextMessage.message}</p>}
+                {nextMessage && (
+                    <p className={nextMessage.style}>{nextMessage.message}</p>
+                )}
                 {error && <p className="error">{error}</p>}
             </div>
         </div>

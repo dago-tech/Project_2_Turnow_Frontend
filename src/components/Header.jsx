@@ -24,9 +24,9 @@ export function Header() {
 
             <div>
                 <ul className="header-list">
-                    <li>
+                    {condition3 && (<li>
                         <Link to="/login">Login</Link>
-                    </li>
+                    </li>)}
                     <li>
                         <Link to="/logout">Logout</Link>
                     </li>

@@ -9,6 +9,12 @@ body {
     gap: 10px; /* Espacio entre las celdas, ajusta según sea necesario */
 }
 
+.admin-home {
+    text-align: center;
+    max-width: 500px;
+    margin: auto;
+}
+
 .my-header {
     display: flex;
     justify-content: space-between;
