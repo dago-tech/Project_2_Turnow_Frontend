@@ -3,7 +3,6 @@ import { Home } from "./components/Home";
 import Login from "./auth/Login";
 import { Notification } from "./Notification/Notification";
 import { Clients } from "./Clients/Clients";
-import { Error404 } from "./components/Error404";
 import { DeskMain } from "./UserDesk/DeskMain";
 import { AdminMain } from "./UserAdmin/AdminMain";
 import { WebSocketProvider } from "./context/WebSocketContext";
@@ -13,6 +12,7 @@ import PrivateRoute from "./auth/PrivateRoute";
 
 
 function App() {
+    /* Main Application component, it renders all child components based on its route */
     return (
         <>
             <WebSocketProvider>

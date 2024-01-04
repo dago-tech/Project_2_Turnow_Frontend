@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import ClientContext from "../context/ClientContext";
 import { getData } from "../helpers/axios";
 import BackButton from "../components/BackButton";
+import { errorMessage } from "../helpers/errorMessage";
 
 export function ClientPriority() {
+    /* Shows different kind of client priorities to get new turn */
     const { setIdPriority } = useContext(ClientContext);
 
     const history = useNavigate();
     const [priorities, setPriorities] = useState([]);
     const [selected, setSelected] = useState("");
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         // Get the priority list
@@ -18,9 +21,10 @@ export function ClientPriority() {
         getData("priority/")
             .then((response) => {
                 setPriorities(response);
+                setError(null);
             })
             .catch((error) => {
-                console.error("Error:", error);
+                setError(errorMessage(error));
             });
     }, []);
 
@@ -37,12 +41,13 @@ export function ClientPriority() {
     };
 
     return (
-        <>  
+        <>
             <div style={{ textAlign: "left" }}>
-                <BackButton/>
+                <BackButton />
             </div>
             <h2 style={{ textAlign: "center" }}>Select a priority:</h2>
             <ul style={{ textAlign: "center" }}>
+                {error && <p className="error">{error}</p>}
                 {priorities.map((priority) => (
                     <li key={priority.id}>
                         <button
@@ -65,6 +70,7 @@ export function ClientPriority() {
                     Next
                 </button>
             </div>
+            
         </>
     );
 }

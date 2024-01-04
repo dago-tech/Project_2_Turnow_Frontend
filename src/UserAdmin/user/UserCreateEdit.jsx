@@ -4,6 +4,7 @@ import { getData, patchData, postData } from '../../helpers/axios';
 
 
 export function UserCreateEdit({ edit }) {
+    /* Shows a form to create o edit a User register */
 
     const endpoint = "user/create/"
     const history = useNavigate();

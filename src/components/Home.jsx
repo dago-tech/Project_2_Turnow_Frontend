@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { Header } from "./Header";
 
 export function Home() {
-
+    /*Index  page, shows main application menu */
     return (
         <>
-            <Header/>
-        
+            <Header />
+
             <div style={{ textAlign: "center" }}>
                 <h1 style={{ margin: "70px" }}>TURNOW</h1>
 

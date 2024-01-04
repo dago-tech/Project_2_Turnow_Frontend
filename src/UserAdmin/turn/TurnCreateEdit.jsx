@@ -1,8 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, patchData } from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 
 export function TurnCreateEdit({ edit }) {
+    /* Shows a form to create o edit a turn register */
+
     const endpoint = "turn/create/";
     const history = useNavigate();
     const { id } = useParams();
@@ -20,13 +23,32 @@ export function TurnCreateEdit({ edit }) {
     const [categoryOptions, setCategoryOptions] = useState([]);
     const [priorityOptions, setPriorityOptions] = useState([]);
     const [deskOptions, setDeskOptions] = useState([]);
-    const [errorForm, setErrorForm] = useState("");
+    const [error, setError] = useState("");
+
+    const currentPath = location.pathname.split('/')[1];
+    let destinationPath = "";
 
     useEffect(() => {
-        getForeignKey("client/", setClientOptions);
-        getForeignKey("category/", setCategoryOptions);
-        getForeignKey("priority/", setPriorityOptions);
-        getForeignKey("desk/", setDeskOptions);
+
+        getData("client/")
+            .then((response) => {
+                setClientOptions(response)
+                return getData("category/")
+            })
+            .then((response) => {
+                setCategoryOptions(response)
+                return getData("priority/")
+            })
+            .then((response) => {
+                setPriorityOptions(response)
+                return getData("desk/")
+            })
+            .then((response) => {
+                setDeskOptions(response)
+            }).catch((error) => {
+                setError(errorMessage(error));
+            });
+
 
         if (edit) {
             getData("turn/get/" + id)
@@ -39,22 +61,13 @@ export function TurnCreateEdit({ edit }) {
                         ["priority"]: response.priority,
                         ["desk"]: response.desk || "",
                     });
+                    setError(null);
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                    setError(errorMessage(error));
                 });
         }
     }, []);
-
-    const getForeignKey = async (endpoint, func) => {
-        getData(endpoint)
-            .then((response) => {
-                func(response);
-            })
-            .catch((error) => {
-                console.error("Error getting options:", error);
-            });
-    };
 
     const handleChange = (e) => {
         setFormData({
@@ -78,20 +91,26 @@ export function TurnCreateEdit({ edit }) {
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+    const handleSubmit = () => {
 
         if (
             formData.personal_id == "" ||
             formData.category == "" ||
             formData.priority == ""
         ) {
-            setErrorForm("¡You did not fill out all the fields!");
+            setError("¡You did not fill out all the fields!");
             return;
         }
         // Clean ErrorForm if no validation issues
-        setErrorForm("");
+        setError("");
+        
+        //Set destination path based on current path
+        if (currentPath == "user_desk"){
+            destinationPath = `/user_desk/turn`
+        } else {
+            destinationPath = `/user_admin/turn`;
+        }
+        
 
         if (edit) {
             patchData(`turn/update/` + id + "/", {
@@ -100,18 +119,26 @@ export function TurnCreateEdit({ edit }) {
                 category: formData.category,
                 priority: formData.priority,
                 desk: formData.desk,
+            }).then(() => {
+                history({
+                    pathname: destinationPath,
+                });
+            }).catch((error) => {
+                setError(errorMessage(error));
             });
         } else {
-            postData(endpoint, formData);
+            postData(endpoint, formData)
+                .then(() => {
+                    history({
+                        pathname: destinationPath,
+                    });
+                }).catch((error) => {
+                    setError(errorMessage(error));
+                });
         }
-
-        history(-1);
-        setTimeout(() => {
-            window.location.reload();
-        }, 50);
     };
 
-    const handleReset = (e) => {
+    const handleReset = () => {
         setFormData(initialFormData);
     };
 
@@ -133,7 +160,7 @@ export function TurnCreateEdit({ edit }) {
                     <option value="cancelled">Cancelled</option>
                 </select>
                 <br />
-                <label htmlFor="personal_id">User:</label>
+                <label htmlFor="personal_id">Client:</label>
                 <select
                     id="personal_id"
                     name="personal_id"
@@ -194,10 +221,10 @@ export function TurnCreateEdit({ edit }) {
                     ))}
                 </select>
                 <br />
-                {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }

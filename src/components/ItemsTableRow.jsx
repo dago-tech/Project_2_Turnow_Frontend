@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const ItemsTableRow = ({ el, displayField, deleteData, endpoint }) => {
+    /*Renders each row of ItemsTable component */
+    
     const history = useNavigate();
     let id = el["id"];
     let field = el[displayField];

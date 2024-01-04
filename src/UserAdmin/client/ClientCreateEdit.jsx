@@ -1,8 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 
 export function ClientCreateEdit({ edit }) {
+    /* Shows a form to create o edit a Client register */
+
     const endpoint = "client/create/";
     const history = useNavigate();
     const { id } = useParams();
@@ -13,21 +16,21 @@ export function ClientCreateEdit({ edit }) {
     };
 
     const [formData, setFormData] = useState(initialFormData);
-    const [errorForm, setErrorForm] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (edit) {
             getData("client/get/" + id)
                 .then((response) => {
-                    console.log(response);
                     setFormData({
                         ...formData,
                         ["id_type"]: response.id_type,
                         ["personal_id"]: response.personal_id,
                     });
+                    setError(null);
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                    setError(errorMessage(error));
                 });
         }
     }, []);
@@ -39,33 +42,39 @@ export function ClientCreateEdit({ edit }) {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+    const handleSubmit = () => {
 
         if (formData.personal_id == "" || formData.id_type == "") {
-            setErrorForm("¡You did not fill out all the fields!");
+            setError("¡You did not fill out all the fields!");
             return;
         }
         // Clean ErrorForm if no validation issues
-        setErrorForm("");
+        setError("");
 
         if (edit) {
             putData(`client/update/` + id + "/", {
                 id_type: formData.id_type,
                 personal_id: formData.personal_id,
+            }).then(() => {
+                history({
+                    pathname: "/user_admin/client/",
+                });
+            }).catch((error) => {
+                setError(errorMessage(error));
             });
         } else {
-            postData(endpoint, formData);
+            postData(endpoint, formData)
+                .then(() => {
+                    history({
+                        pathname: "/user_admin/client/",
+                    });
+                }).catch((error) => {
+                    setError(errorMessage(error));
+                });
         }
-
-        history({
-            pathname: "/user_admin/client/",
-        });
-        window.location.reload();
     };
 
-    const handleReset = (e) => {
+    const handleReset = () => {
         setFormData(initialFormData);
     };
 
@@ -96,10 +105,10 @@ export function ClientCreateEdit({ edit }) {
                     value={formData.personal_id}
                 />
                 <br />
-                {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }

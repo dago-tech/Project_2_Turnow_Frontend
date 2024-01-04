@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const NotAuthorized = () => {
-
+    /*Shows a message for 2 seconds indicating that a login is missing */
     const history = useNavigate();
 
     useEffect(()=>{

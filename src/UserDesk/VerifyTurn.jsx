@@ -5,14 +5,22 @@ import { useWebSocket } from "../context/WebSocketContext";
 import { putData } from "../helpers/axios";
 import { useAuth } from "../context/AuthContext";
 import "../styles/main.css";
+import { errorMessage } from "../helpers/errorMessage";
 
 export function VerifyTurn() {
-    
-    const { verifyMessage, setVerifyMessage, setServedMessage } = useContext(TurnContext);
+    /*Renders an input text to enter client's turn in order to validate if it is the same
+    that desk user had called previously */
+
+    const {
+        verifyMessage,
+        setNextMessage,
+        setVerifyMessage,
+        setServedMessage,
+    } = useContext(TurnContext);
     const { sendMessage } = useWebSocket();
     const { thisDeskId } = useAuth();
     const endpoint = `turn/serving/${thisDeskId}/`;
-    
+
     const defaultMessage = {
         message: "Waiting",
         style: "default",
@@ -20,11 +28,6 @@ export function VerifyTurn() {
     const successMessage = {
         message: "Turn has been verified",
         style: "success",
-    };
-    const errorMessage = {
-        message:
-            "This turn number is not the first to serve for this service desk",
-        style: "error",
     };
 
     const initialData = {
@@ -41,8 +44,7 @@ export function VerifyTurn() {
         });
     };
 
-    const handleSubmit = (e) => {
-
+    const handleSubmit = () => {
         if (data.turn_number == "") {
             setError("¡Field is empty!");
             return;
@@ -60,12 +62,15 @@ export function VerifyTurn() {
                     "This message is used to trigger onmessage webSocket method"
                 );
             })
-            .catch(() => {
-                setVerifyMessage(errorMessage);
+            .catch((error) => {
+                setVerifyMessage(null);
+                setNextMessage(defaultMessage);
+                setServedMessage(defaultMessage);
+                setError(errorMessage(error));
             });
     };
 
-    const handleReset = (e) => {
+    const handleReset = () => {
         setData(initialData);
     };
 
@@ -93,10 +98,12 @@ export function VerifyTurn() {
             </form>
             <div>
                 <h4>Message: </h4>
-                <br />
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                <br />
-                <p className={verifyMessage.style}>{verifyMessage.message}</p>
+                {verifyMessage && (
+                    <p className={verifyMessage.style}>
+                        {verifyMessage.message}
+                    </p>
+                )}
+                {error && <p className="error">{error}</p>}
             </div>
         </div>
     );

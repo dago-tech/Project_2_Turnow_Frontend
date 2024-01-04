@@ -3,17 +3,21 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { postData } from "../helpers/axios";
 import ClientContext from "../context/ClientContext";
-import "../styles/main.css";
 import BackButton from "../components/BackButton";
+import { errorMessage } from "../helpers/errorMessage";
+import "../styles/main.css";
 
 export function ClientId() {
-    const { setIdClient } = useContext(ClientContext);
+    /*Shows a keypad and an Id type selector to introduce cleint data to get a new turn */
 
-    const endpoint = "client/create/";
     const history = useNavigate();
+    const endpoint = "client/create/";
+
     const [idType, setIdType] = useState("");
     const [idNumber, setIdNumber] = useState("");
     const [selected, setSelected] = useState("");
+    const [error, setError] = useState("");
+    const { setIdClient } = useContext(ClientContext);
 
     const handleSelection = (type) => {
         setIdType(type);
@@ -34,19 +38,22 @@ export function ClientId() {
             personal_id: idNumber,
         };
 
-        postData(endpoint, data).then((response) => {
-            setIdClient(response.id);
-        });
-
-        history({
-            pathname: "/client/priority/",
-        });
+        postData(endpoint, data)
+            .then((response) => {
+                setIdClient(response.id);
+                setError(null);
+                history({
+                    pathname: "/client/priority/",
+                });
+            }).catch((error) => {
+                setError(errorMessage(error));
+            });    
     };
 
     return (
         <>
             <div style={{ textAlign: "left" }}>
-                <BackButton/>
+                <BackButton />
             </div>
             <div className={"container"}>
                 <div style={{ margin: 20, textAlign: "right" }}>
@@ -157,8 +164,9 @@ export function ClientId() {
                         </table>
                     </div>
                 </div>
+                {error && <p className="error">{error}</p>}
             </div>
-
+                                       
             <div style={{ textAlign: "right" }}>
                 <button
                     className={"next_button"}

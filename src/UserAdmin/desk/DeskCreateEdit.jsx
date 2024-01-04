@@ -2,8 +2,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
 import api from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 
 export function DeskCreateEdit({ edit }) {
+    /* Shows a form to create o edit a Desk (Service point) register */
+
     const endpoint = "desk/create/";
     const history = useNavigate();
     const { id } = useParams();
@@ -19,16 +22,24 @@ export function DeskCreateEdit({ edit }) {
     const [formData, setFormData] = useState(initialFormData);
     const [userOptions, setUserOptions] = useState([]);
     const [categoryOptions, setCategoryOptions] = useState([]);
-    const [errorForm, setErrorForm] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        getForeignKey("user/", setUserOptions);
-        getForeignKey("category/", setCategoryOptions);
+
+        getData("user/")
+            .then((response) => {
+                setUserOptions(response)
+                return getData("category/")
+            })
+            .then((response) => {
+                setCategoryOptions(response)
+            }).catch((error) => {
+                setError(errorMessage(error));
+            });
 
         if (edit) {
             getData("desk/get/" + id)
                 .then((response) => {
-                    console.log(response);
                     setFormData({
                         ...formData,
                         ["name"]: response.name,
@@ -37,22 +48,13 @@ export function DeskCreateEdit({ edit }) {
                         ["user"]: response.user,
                         ["category"]: response.category,
                     });
+                    setError(null);
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                    setError(errorMessage(error));
                 });
         }
     }, []);
-
-    const getForeignKey = async (endpoint, func) => {
-        try {
-            const response = await api.get(endpoint);
-            func(response.data);
-            console.log(response.data);
-        } catch (error) {
-            console.error("Error getting user and category options:", error);
-        }
-    };
 
     const handleChange = (e) => {
         setFormData({
@@ -91,20 +93,18 @@ export function DeskCreateEdit({ edit }) {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+    const handleSubmit = () => {
 
         if (
             formData.name == "" ||
             !formData.user ||
             formData.category.length == 0
         ) {
-            setErrorForm("¡You did not fill out all the fields!");
+            setError("¡You did not fill out all the fields!");
             return;
         }
         // Clean ErrorForm if no validation issues
-        setErrorForm("");
+        setError("");
 
         if (edit) {
             putData(`desk/update/` + id + "/", {
@@ -113,29 +113,26 @@ export function DeskCreateEdit({ edit }) {
                 busy: formData.busy,
                 user: formData.user,
                 category: formData.category,
-            }).then()
-            .catch((error) => {
-                    setErrorForm("Check if this user has not been assigned to other service desk");
-                    return;
-                }                
-            );
+            }).then(() => {
+                history({
+                    pathname: "/user_admin/desk/",
+                });
+            }).catch((error) => {
+                setError(errorMessage(error));
+            });            
         } else {
             postData(endpoint, formData)
-            .then()
-            .catch((error) => {
-                    setErrorForm("Check if this user has not been assigned to other service desk");
-                    return;
-                }
-            );
+                .then(() => {
+                    history({
+                        pathname: "/user_admin/desk/",
+                    });
+                }).catch((error) => {
+                    setError(errorMessage(error));
+                });
         }
-
-        history({
-            pathname: "/user_admin/desk/",
-        });
-        window.location.reload();
     };
 
-    const handleReset = (e) => {
+    const handleReset = () => {
         setFormData(initialFormData);
     };
 
@@ -202,10 +199,10 @@ export function DeskCreateEdit({ edit }) {
                     Busy
                 </label>
                 <br />
-                {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }

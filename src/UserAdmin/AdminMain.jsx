@@ -16,6 +16,9 @@ import { TurnCreateEdit } from "./turn/TurnCreateEdit";
 import BackButton from "../components/BackButton";
 
 export function AdminMain() {
+    /* Shows the admin main page, an admin user will be able to create and edit registers of
+    categories, priorities, users and turns */
+
     return (
         <div style={{ display: "flex" }}>
             <div style={{ flex: 1, textAlign: "center" }}>

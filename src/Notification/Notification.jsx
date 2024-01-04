@@ -3,15 +3,18 @@ import { getData } from "../helpers/axios";
 import { useWebSocket } from "../context/WebSocketContext";
 import BackButton from "../components/BackButton";
 import Loader from "../components/Loader";
+import { errorMessage } from "../helpers/errorMessage";
 
 export function Notification() {
+    /* Shows a list of turns called by a desk user */
+
     const endpoint = "turn/notification";
 
     const [data, setData] = useState([]);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const { mensajeRecibido, notificationChange } = useWebSocket();
+    const { notificationChange } = useWebSocket();
 
     useEffect(() => {
         setLoading(true);
@@ -20,19 +23,15 @@ export function Notification() {
                 setData(response);
                 setError(null);
                 setLoading(false);
-                console.log("cambiando listado");
             })
             .catch((error) => {
-                console.error("Error:", error);
-                setError(error);
+                setError(errorMessage(error));
                 setLoading(false);
             });
 
     }, [notificationChange]);
     
-    console.log(notificationChange)
-    console.log(data)
-
+    //console.log(notificationChange)
     return (
         <>
             <div>
@@ -40,8 +39,7 @@ export function Notification() {
             </div>
             <div className="center">
                 <h2>Turn notification</h2>
-                {/* {loading && <Loader />} */}
-                {error && <p className="error">{error.message}</p>}
+                {error && <p className="error">{error}</p>}
                 
                 {loading ? (
                     <Loader />
@@ -68,7 +66,6 @@ export function Notification() {
                 {typeof data === "object" && (
                     <p className="error">{data.message}</p>
                 )}
-                {/* <p>Mensaje Recibido: {mensajeRecibido}</p> */}
             </div>
         </>
     );

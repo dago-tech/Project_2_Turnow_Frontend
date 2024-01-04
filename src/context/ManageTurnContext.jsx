@@ -3,6 +3,8 @@ import { createContext, useState } from "react";
 const TurnContext = createContext();
 
 export const TurnProvider = ({ children }) => {
+    /* Context provider of turn information when a desk user is attending a pending turn */
+
     const initialMessage = {
         message: "Waiting",
         style: "default",

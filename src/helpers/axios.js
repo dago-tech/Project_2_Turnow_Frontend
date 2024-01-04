@@ -1,5 +1,7 @@
 import axios from "axios";
 
+/* Manages axios and tokens requests */
+
 const baseURL = "https://localhost/api/";
 
 const api = axios.create({
@@ -7,7 +9,7 @@ const api = axios.create({
     timeout: 5000,
     headers: {
         Authorization: localStorage.getItem('access_token')
-        	? 'Bearer ' + localStorage.getItem('access_token')
+        	? 'JWT ' + localStorage.getItem('access_token')
         	: null,
         //'Content-Type': 'multipart/form-data',
         "Content-Type": "application/json",
@@ -105,17 +107,13 @@ api.interceptors.response.use(
 			error.response.statusText === 'Unauthorized'
 		) {
 			const refreshToken = localStorage.getItem('refresh_token');
-            console.log('Entró al if de Unauthorized')
 			if (refreshToken) {
 				//atob decodes a base64-encoded string
 				//Decode information from the payload into an object, some metadata as exp time
 				const tokenParts = JSON.parse(atob(refreshToken.split('.')[1]));
-                console.log(tokenParts)
 				// exp date in token is expressed in seconds, while now() returns milliseconds
 				// Round up Date.now
 				const now = Math.ceil(Date.now() / 1000);
-                console.log(now)
-				console.log(tokenParts.exp);
 
 				if (tokenParts.exp > now) {
 					return api

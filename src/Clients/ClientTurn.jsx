@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import ClientContext from "../context/ClientContext";
 import { postData } from "../helpers/axios";
 import "../styles/main.css";
+import { errorMessage } from "../helpers/errorMessage";
 
 export function ClientTurn() {
+    /* Shows the resulting turn number, after this, client should wait until his call */
+
     const {
         idClient,
         idCategory,
@@ -35,11 +38,10 @@ export function ClientTurn() {
 
         postData(endpoint, data)
             .then((response) => {
-                console.log(response);
                 setTurnNumber(response.turn_number);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
+                setError(null);
+            }).catch((error) => {
+                setError(errorMessage(error));
             });
 
         setIdClient(null);

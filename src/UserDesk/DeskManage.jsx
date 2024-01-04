@@ -6,9 +6,11 @@ import { TurnProvider } from "../context/ManageTurnContext";
 import { getData } from "../helpers/axios";
 import "../styles/main.css";
 import { useAuth } from "../context/AuthContext";
+import { errorMessage } from "../helpers/errorMessage";
 
 
 export function DeskManage() {
+    /* Shows turn management components and checks for a new turns to attend */
     const initialMessage = {
         text: "",
         style: "error",
@@ -32,7 +34,7 @@ export function DeskManage() {
                     }
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                    setError(errorMessage(error));
                 });
         };
 

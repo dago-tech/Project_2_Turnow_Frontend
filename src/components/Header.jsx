@@ -3,21 +3,23 @@ import { useAuth } from '../context/AuthContext';
 import "../styles/main.css";
 
 export function Header() {
+    /*User authentication information and Login-Logout links*/
 
     const { isAuthenticated, isAdmin, userEmail } = useAuth();
 
-    const message1 = `You are logged as: ${userEmail}`
-    const message2 = `You are not logged`
-    console.log(isAuthenticated)
+    const condition1 = isAuthenticated && isAdmin;
+    const condition2 = isAuthenticated && !isAdmin;
+    const condition3 = !isAuthenticated;
+    const message1 = `You are logged as: ${userEmail} (Admin User)`
+    const message2 = `You are logged as: ${userEmail} (Desk User)`
+    const message3 = `You are not logged`
 
     return (
         <div className="my-header">
             <div>
-                {isAuthenticated ? (
-                    <p>{message1}</p>
-                ):(
-                    <p>{message2}</p>
-                )}
+                {condition1 && (<p>{message1}</p>)}
+                {condition2 && (<p>{message2}</p>)}
+                {condition3 && (<p>{message3}</p>)}
             </div>
 
             <div>

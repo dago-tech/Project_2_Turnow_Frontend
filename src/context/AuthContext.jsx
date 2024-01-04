@@ -5,6 +5,9 @@ import { checkAuthentication } from "../helpers/checkAuth";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+    /* Context provider of authentication variables and it checks if user is
+    authenticated and an admin */
+
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [isAdmin, setIsAdmin] = useState(null);
     const [message, setMessage] = useState("");
@@ -33,13 +36,12 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         checkAuthentication()
             .then((response) => {
-                console.log(response);
                 setIsAuthenticated(response.authenticated);
+                setIsAdmin(response.isAdmin)
             })
-            .catch((error) => {
+            .catch(() => {
                 setIsAuthenticated(false);
                 setIsAdmin(false);
-                console.log(error);
             });
 
         setUserEmail(getCookieValue("userEmail") || null);

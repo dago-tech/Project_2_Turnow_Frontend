@@ -6,6 +6,7 @@ import { ClientCategory } from "./ClientCategory";
 import { ClientProvider } from "../context/ClientContext";
 
 export function Clients() {
+    /*Main conponent of Clients section */
     return (
         <>
             <ClientProvider>
@@ -14,7 +15,6 @@ export function Clients() {
                     <Route path="/priority" element={<ClientPriority />} />
                     <Route path="/category" element={<ClientCategory />} />
                     <Route path="/turn" element={<ClientTurn />} />
-                    {/* <Route path="*" element={<Error404 />} /> */}
                 </Routes>
             </ClientProvider>
         </>

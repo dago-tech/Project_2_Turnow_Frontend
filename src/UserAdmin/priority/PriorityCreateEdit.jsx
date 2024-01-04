@@ -1,8 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 
 export function PriorityCreateEdit({ edit }) {
+    /* Shows a form to create o edit a priority register */
+
     const endpoint = "priority/create/";
     const history = useNavigate();
     const { id } = useParams();
@@ -13,22 +16,22 @@ export function PriorityCreateEdit({ edit }) {
     };
 
     const [formData, setFormData] = useState(initialFormData);
-    const [errorForm, setErrorForm] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (edit) {
             getData("priority/get/" + id)
                 .then((response) => {
-                    console.log(response);
                     setFormData({
                         ...formData,
                         ["name"]: response.name,
                         ["description"]: response.description,
                         ["priority"]: response.priority,
                     });
+                    setError(null);
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                    setError(errorMessage(error));
                 });
         }
     }, []);
@@ -40,40 +43,47 @@ export function PriorityCreateEdit({ edit }) {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+    const handleSubmit = () => {
 
         if (formData.name == "") {
-            setErrorForm("¡You did not fill out all the fields!");
+            setError("¡You did not fill out all the fields!");
             return;
         }
         // Clean ErrorForm if no validation issues
-        setErrorForm("");
+        setError("");
 
         if (edit) {
             putData(`priority/update/` + id + "/", {
                 name: formData.name,
                 description: formData.description,
                 priority: formData.priority,
+            }).then(() => {
+                history({
+                    pathname: "/user_admin/priority/",
+                });
+            }).catch((error) => {
+                setError(errorMessage(error));
             });
         } else {
-            postData(endpoint, formData);
+            postData(endpoint, formData)
+                .then(() => {
+                    history({
+                        pathname: "/user_admin/priority/",
+                    });
+                }).catch((error) => {
+                    setError(errorMessage(error));
+                });
         }
-
-        history({
-            pathname: "/user_admin/priority/",
-        });
-        window.location.reload();
     };
 
-    const handleReset = (e) => {
+    const handleReset = () => {
         setFormData(initialFormData);
     };
 
     return (
         <div className="center">
             <h1>Priority</h1>
+            <p>(The higher the number, the higher the priority)</p>
             <form>
                 <label htmlFor="name">Name: </label>
                 <input
@@ -93,7 +103,7 @@ export function PriorityCreateEdit({ edit }) {
                     value={formData.description ?? ""}
                 />
                 <br />
-                <label htmlFor="priority">Priority: </label>
+                <label htmlFor="priority">Priority (0 to 20 number): </label>
                 <input
                     type="text"
                     name="priority"
@@ -102,10 +112,10 @@ export function PriorityCreateEdit({ edit }) {
                     value={formData.priority}
                 />
                 <br />
-                {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }

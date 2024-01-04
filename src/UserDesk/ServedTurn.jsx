@@ -1,12 +1,15 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import TurnContext from "../context/ManageTurnContext";
 import { putData } from "../helpers/axios";
 import { useAuth } from "../context/AuthContext";
+import { errorMessage } from "../helpers/errorMessage";
 
 export function ServedTurn() {
+    /* Mark current turn as served or attended */
     
     const { thisDeskId } = useAuth()
     const endpoint = `turn/served/${thisDeskId}/`;
+    const [error, setError] = useState("");
 
     const {
         servedMessage,
@@ -25,22 +28,19 @@ export function ServedTurn() {
         style: "success",
     };
 
-    const errorMessage = {
-        message: "There is an error",
-        style: "error",
-    };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
 
         putData(endpoint)
             .then(() => {
                 setServedMessage(successMessage);
                 setNextMessage(defaultMessage);
                 setVerifyMessage(defaultMessage);
+                setError(null);
             })
-            .catch(() => {
-                setServedMessage(errorMessage);
+            .catch((error) => {
+                setServedMessage(null);
+                setError(errorMessage(error));
             });
     };
 
@@ -52,8 +52,8 @@ export function ServedTurn() {
 
             <div>
                 <h4>Message: </h4>
-                <br />
-                <p className={servedMessage.style}>{servedMessage.message}</p>
+                {servedMessage && <p className={servedMessage.style}>{servedMessage.message}</p>}
+                {error && <p className="error">{error}</p>}
             </div>
         </div>
     );

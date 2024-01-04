@@ -4,22 +4,27 @@ import { useContext } from "react";
 import ClientContext from "../context/ClientContext";
 import { getData } from "../helpers/axios";
 import BackButton from "../components/BackButton";
+import { errorMessage } from "../helpers/errorMessage";
+import "../styles/main.css";
 
 export function ClientCategory() {
-    const { setIdCategory } = useContext(ClientContext);
+    /* Shows different kind of client categories to get new turn */
+
     const history = useNavigate();
     const [categories, setCategories] = useState([]);
     const [selected, setSelected] = useState("");
+    const [error, setError] = useState("");
+    const { setIdCategory } = useContext(ClientContext);
 
     useEffect(() => {
         // Get the category list
-
         getData("category/")
             .then((response) => {
                 setCategories(response);
+                setError(null);
             })
             .catch((error) => {
-                console.error("Error:", error);
+                setError(errorMessage(error));
             });
     }, []);
 
@@ -43,6 +48,7 @@ export function ClientCategory() {
             <h2 style={{ textAlign: "center" }}>Select your category:</h2>
 
             <ul style={{ textAlign: "center" }}>
+                {error && <p className="error">{error}</p>}
                 {categories.map((category) => (
                     <li key={category.id}>
                         <button

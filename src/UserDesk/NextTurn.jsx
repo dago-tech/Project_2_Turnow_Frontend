@@ -1,15 +1,19 @@
 import { putData } from "../helpers/axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import TurnContext from "../context/ManageTurnContext";
-import "../styles/main.css";
 import { useWebSocket } from "../context/WebSocketContext";
 import { useAuth } from "../context/AuthContext";
+import { errorMessage } from "../helpers/errorMessage";
+import "../styles/main.css";
 
 export function NextTurn() {
-    
+    /*Renders a button which allows to call for a new turn based on priority, category
+    and creation time */
+
     const { nextMessage, setNextMessage, setVerifyMessage, setServedMessage } =
         useContext(TurnContext);
     const { thisDeskId } = useAuth();
+    const [error, setError] = useState("");
     const endpoint = `turn/serve/${thisDeskId}/`;
 
     const { sendMessage } = useWebSocket();
@@ -22,14 +26,9 @@ export function NextTurn() {
         message: "One turn has been required",
         style: "success",
     };
-    const errorMessage = {
-        message: "There are no pending turns",
-        style: "error",
-    };
 
     //Update Turn Notification Table
     const webSocketMessage = () => {
-        console.log("Websocket message")
         sendMessage(
             "This message is used to trigger onmessage webSocket method"
         );
@@ -43,8 +42,11 @@ export function NextTurn() {
                 setServedMessage(defaultMessage);
                 webSocketMessage()
             })
-            .catch(() => {
-                setNextMessage(errorMessage);
+            .catch((error) => {
+                setNextMessage(null);
+                setVerifyMessage(defaultMessage);
+                setServedMessage(defaultMessage);
+                setError(errorMessage(error));
             });
     };
 
@@ -55,9 +57,9 @@ export function NextTurn() {
             </button>
             <div>
                 <h4>Message: </h4>
-                <button onClick={webSocketMessage}>Send Message</button>
-                <br />
-                <p className={nextMessage.style}>{nextMessage.message}</p>
+                {/* <button onClick={webSocketMessage}>Send Message</button> */}
+                {nextMessage && <p className={nextMessage.style}>{nextMessage.message}</p>}
+                {error && <p className="error">{error}</p>}
             </div>
         </div>
     );

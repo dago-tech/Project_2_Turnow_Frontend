@@ -1,3 +1,5 @@
+/* Functions to get, create or delete Cookies */
+
 export const getCookieValue = (cookieName) => {
     const cookies = document.cookie.split('; ')
     

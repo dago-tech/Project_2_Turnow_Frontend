@@ -4,6 +4,7 @@ import NotAuthorized from "./NotAuthorized";
 import { checkAuthentication } from "../helpers/checkAuth";
 
 const PrivateRoute = ({ element: Element, adminRequired = false, ...rest }) => {
+    /*Manages private routes, allows access depending on if user is an admin or not */
     const { isAuthenticated, setIsAuthenticated, isAdmin, setIsAdmin } =
         useAuth();
 
@@ -21,8 +22,7 @@ const PrivateRoute = ({ element: Element, adminRequired = false, ...rest }) => {
     }, []);
 
     if (isAuthenticated === null || isAdmin === null) {
-        console.log("Verificando autenticación...");
-        return <p>Verificando autenticación...</p>;
+        return <p>Verifying authentication...</p>;
     }
 
     // If pass verifications, render the component

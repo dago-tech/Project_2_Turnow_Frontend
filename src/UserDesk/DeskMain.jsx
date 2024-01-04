@@ -8,12 +8,17 @@ import { useEffect, useState } from "react";
 import { getData, putData } from "../helpers/axios";
 import BackButton from "../components/BackButton";
 import { TurnCreateEdit } from "../UserAdmin/turn/TurnCreateEdit";
+import { errorMessage } from "../helpers/errorMessage";
 
 export function DeskMain() {
+    /* Shows the desk user main page, a desk user will be able to call for a new turn 
+    and mark when it has been attended */
+
     const { thisDesk, setThisDesk, setMessage, message, setThisDeskId } =
         useAuth();
     const [showModal, setShowModal] = useState(false);
     const restartTurnEndpoint = "turn/restart/";
+    const [error, setError] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem("access_token");
@@ -23,7 +28,6 @@ export function DeskMain() {
 
             getData(`desk/get_desk/${tokenParts.user_id}/`)
                 .then((response) => {
-                    console.log(response);
                     const deskName = response.desk_name;
                     const deskId = response.desk_id;
                     setThisDesk(deskName);
@@ -31,10 +35,10 @@ export function DeskMain() {
                     setMessage(response.message);
                 })
                 .catch((error) => {
-                    console.log("Error");
+                    setError(errorMessage(error));
                 });
         } else {
-            setMessage("Incorrect user login");
+            setError("Incorrect user login");
         }
     }, []);
 
@@ -44,14 +48,16 @@ export function DeskMain() {
 
     const handleConfirm = () => {
         putData(restartTurnEndpoint)
-            .then(() => {})
-            .catch((error) => {});
-        // Cierra el modal después de confirmar
-        setShowModal(false);
+            .then(() => {
+                setShowModal(false);
+            })
+            .catch((error) => {
+                setError(errorMessage(error));
+            });
+        
     };
 
     const handleCancel = () => {
-        // Cierra el modal
         setShowModal(false);
     };
 
@@ -85,6 +91,7 @@ export function DeskMain() {
 
             <div style={{ flex: 5, marginRight: "15vw" }}>
                 <BackButton />
+                {error && <p className="error">{error}</p>}
                 {message == "desk_name" ? (
                     <>
                         <p>You are assigned to service desk: {thisDesk}</p>
@@ -99,7 +106,7 @@ export function DeskMain() {
                     </>
                 ) : (
                     <>
-                        <p>You are not assigned to any service desk</p>
+                        <p>You are not assigned to any service desk.</p>
                         <Routes>
                             <Route path="/turn" element={<TurnList />} />
                         </Routes>

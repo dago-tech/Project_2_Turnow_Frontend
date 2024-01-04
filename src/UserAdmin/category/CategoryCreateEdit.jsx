@@ -1,8 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 
 export function CategoryCreateEdit({ edit }) {
+    /* Shows a form to create o edit a Category register */
+
     const endpoint = "category/create/";
     const history = useNavigate();
     const { id } = useParams();
@@ -12,21 +15,21 @@ export function CategoryCreateEdit({ edit }) {
     };
 
     const [formData, setFormData] = useState(initialFormData);
-    const [errorForm, setErrorForm] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (edit) {
             getData("category/get/" + id)
                 .then((response) => {
-                    console.log(response);
                     setFormData({
                         ...formData,
                         ["name"]: response.name,
                         ["description"]: response.description,
                     });
+                    setError(null);
                 })
                 .catch((error) => {
-                    console.error("Error:", error);
+                    setError(errorMessage(error));
                 });
         }
     }, []);
@@ -38,33 +41,39 @@ export function CategoryCreateEdit({ edit }) {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formData);
+    const handleSubmit = () => {
 
         if (formData.name == "") {
-            setErrorForm("¡You did not fill out all the fields!");
+            setError("¡You did not fill out all the fields!");
             return;
         }
         // Clean ErrorForm if no validation issues
-        setErrorForm("");
+        setError("");
 
         if (edit) {
             putData(`category/update/` + id + "/", {
                 name: formData.name,
                 description: formData.description,
+            }).then(() => {
+                history({
+                    pathname: "/user_admin/category/",
+                });
+            }).catch((error) => {
+                setError(errorMessage(error));
             });
         } else {
-            postData(endpoint, formData);
+            postData(endpoint, formData)
+                .then(() => {
+                    history({
+                        pathname: "/user_admin/category/",
+                    });
+                }).catch((error) => {
+                    setError(errorMessage(error));
+                });
         }
-
-        history({
-            pathname: "/user_admin/category/",
-        });
-        window.location.reload();
     };
 
-    const handleReset = (e) => {
+    const handleReset = () => {
         setFormData(initialFormData);
     };
 
@@ -90,10 +99,10 @@ export function CategoryCreateEdit({ edit }) {
                     value={formData.description ?? ""}
                 />
                 <br />
-                {errorForm && <p style={{ color: "red" }}>{errorForm}</p>}
                 <input type="button" value="Send" onClick={handleSubmit} />
                 <input type="reset" value="Clear" onClick={handleReset} />
             </form>
+            {error && <p className="error">{error}</p>}
         </div>
     );
 }

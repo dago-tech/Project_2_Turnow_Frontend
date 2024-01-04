@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Modal from 'react-modal';
-import Loader from "./Loader";
 import ItemsTable from "./ItemsTable";
 import { getData, deleteData } from "../helpers/axios";
+import { errorMessage } from "../helpers/errorMessage";
+import Loader from "./Loader";
 
 const ItemsCrud = ({ endpoint, displayField }) => {
+    /*Renders a table with information based on the required backend endpoint */
+
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -20,20 +23,19 @@ const ItemsCrud = ({ endpoint, displayField }) => {
                 setError(null);
             })
             .catch((error) => {
-                setError(error);
+                setError(errorMessage(error));
             })
             .finally(() => {
                 setLoading(false);
             });
     }, []);
 
-    const deleteRegister = (id, name) => {
+    const deleteRegister = (id) => {
         setShowModal(true);
         setId(id)
     };
 
     const handleConfirmDelete = () => {
-        // Lógica para realizar el delete
         let delete_endpoint = `${endpoint}delete/${id}/`;
 
         deleteData(delete_endpoint)
@@ -44,26 +46,21 @@ const ItemsCrud = ({ endpoint, displayField }) => {
             })
             .catch((error) => {
                 setData(null);
-                setError(error);
+                setError(errorMessage(error));
             });
-        console.log('Registro eliminado');
 
-        // Cierra el modal después de confirmar
+        // Close modal after confirmation
         setShowModal(false);
     };
 
     const handleCancelDelete = () => {
-        // Lógica para cancelar la eliminación
-        console.log('Eliminación cancelada');
-
-        // Cierra el modal
         setShowModal(false);
     };
 
     return (
         <div>
             {loading && <Loader />}
-            {error && <p className="error">{`Error: ${error.message}`}</p>}
+            {error && <p className="error">{error}</p>}
             {data && (
                 <ItemsTable
                     data={data}

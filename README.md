@@ -9,8 +9,9 @@ Frontend of Turnow Project. A web application that manages turns in different ki
 
 __Missing__
 
+- Desk user will not be able to serve more than one turn at the same time
+- personal_id field --> client (turn model Django)
 - In a Desk, when State=True, application will let users to serve clients
-- Reset turn counting
 - Place startup component in user-admin
 - Testing
 - Deploy
