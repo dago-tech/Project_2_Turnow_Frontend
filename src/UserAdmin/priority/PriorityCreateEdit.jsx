@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
 import { errorMessage } from "../../helpers/errorMessage";
+import { SendClearButtons } from "../../components/SendClearButtons";
 
 export function PriorityCreateEdit({ edit }) {
     /* Shows a form to create o edit a priority register */
@@ -82,7 +83,7 @@ export function PriorityCreateEdit({ edit }) {
 
     return (
         <div className="center">
-            <h1>Priority</h1>
+            <h1 className="create-edit-title">Priority</h1>
             <p>(The higher the number, the higher the priority)</p>
             <form>
                 <label htmlFor="name">Name: </label>
@@ -112,8 +113,10 @@ export function PriorityCreateEdit({ edit }) {
                     value={formData.priority}
                 />
                 <br />
-                <input type="button" value="Send" onClick={handleSubmit} />
-                <input type="reset" value="Clear" onClick={handleReset} />
+                <SendClearButtons
+                    handleSubmit={handleSubmit}
+                    handleReset={handleReset}
+                />
             </form>
             {error && <p className="error">{error}</p>}
         </div>

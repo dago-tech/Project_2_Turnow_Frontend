@@ -24,7 +24,7 @@ export function AdminMain() {
         <div style={{ display: "flex" }}>
             <div style={{ flex: 1, textAlign: "center" }}>
                 <h2>Admin menu</h2>
-                <nav>
+                <nav className="left-menu">
                     <ul>
                         <li>
                             <Link to="/home">Home</Link>
@@ -45,7 +45,7 @@ export function AdminMain() {
                             <Link to="/user_admin/client">Clients</Link>
                         </li>
                         <li>
-                            <Link to="/user_admin/turn">Turns List</Link>
+                            <Link to="/user_admin/turn">Turn List</Link>
                         </li>
                         <br />
                         <li>

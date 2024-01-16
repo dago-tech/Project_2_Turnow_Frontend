@@ -1,36 +1,70 @@
 import { Link } from "react-router-dom";
 import { Header } from "./Header";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Button from "@mui/material/Button";
 
 export function Home() {
     /*Index  page, shows main application menu */
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#34495E",
+            },
+        },
+    });
+
     return (
         <>
-            <Header />
+            <ThemeProvider theme={theme}>
+                <Header />
 
-            <div style={{ textAlign: "center" }}>
-                <h1 style={{ margin: "70px" }}>TURNOW</h1>
+                <div style={{ textAlign: "center" }}>
+                    <h1 className="main-title">TURNOW</h1>
+                    <p className="sub-title">
+                        Your Time, Your Queue: Manage Your Turns Smartly.
+                    </p>
 
-                <Link to="/client">
-                    <button className="principal_button">Clients</button>
-                </Link>
-                <br />
-                <br />
-                <Link to="/notification">
-                    <button className="principal_button">
-                        Notification Screen
-                    </button>
-                </Link>
-                <br />
-                <br />
-                <Link to="/user_admin">
-                    <button className="principal_button">Admin User</button>
-                </Link>
-                <br />
-                <br />
-                <Link to="/user_desk">
-                    <button className="principal_button">Desk User</button>
-                </Link>
-            </div>
+                    <Link to="/client">
+                        <Button
+                            className="principal_button"
+                            variant="contained"
+                        >
+                            Clients
+                        </Button>
+                    </Link>
+                    <br />
+                    <br />
+                    <Link to="/notification">
+                        <Button
+                            className="principal_button"
+                            variant="contained"
+                        >
+                            Notification Screen
+                        </Button>
+                    </Link>
+                    <br />
+                    <br />
+                    <Link to="/user_admin">
+                        <Button
+                            className="principal_button"
+                            variant="contained"
+                        >
+                            Admin User
+                        </Button>
+                    </Link>
+                    <br />
+                    <br />
+                    <Link to="/user_desk">
+                        <Button
+                            className="principal_button"
+                            variant="contained"
+                        >
+                            Desk User
+                        </Button>
+                    </Link>
+                </div>
+            </ThemeProvider>
         </>
     );
 }

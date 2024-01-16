@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, patchData } from "../../helpers/axios";
 import { errorMessage } from "../../helpers/errorMessage";
+import { SendClearButtons } from "../../components/SendClearButtons";
 
 export function TurnCreateEdit({ edit }) {
     /* Shows a form to create o edit a turn register */
@@ -144,7 +145,7 @@ export function TurnCreateEdit({ edit }) {
 
     return (
         <div className="center">
-            <h1>Turn</h1>
+            <h1 className="create-edit-title">Turn</h1>
             <form>
                 <label htmlFor="state">State: </label>
                 <select
@@ -221,8 +222,10 @@ export function TurnCreateEdit({ edit }) {
                     ))}
                 </select>
                 <br />
-                <input type="button" value="Send" onClick={handleSubmit} />
-                <input type="reset" value="Clear" onClick={handleReset} />
+                <SendClearButtons
+                    handleSubmit={handleSubmit}
+                    handleReset={handleReset}
+                />
             </form>
             {error && <p className="error">{error}</p>}
         </div>

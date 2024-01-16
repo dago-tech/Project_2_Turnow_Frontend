@@ -1,5 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 const ItemsTableRow = ({ el, displayField, deleteData, endpoint }) => {
     /*Renders each row of ItemsTable component */
@@ -10,6 +14,14 @@ const ItemsTableRow = ({ el, displayField, deleteData, endpoint }) => {
 
     const currentPath = location.pathname.split('/')[1];
     let destinationPath = "";
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#34495E",
+            },
+        },
+    });
 
     const handleLinkClick = () => {
         /*Change destination path depending on currentPath */
@@ -24,14 +36,31 @@ const ItemsTableRow = ({ el, displayField, deleteData, endpoint }) => {
     };
 
     return (
-        <tr>
-            <td>{id}</td>
-            <td>{field}</td>
-            <td>
-                <button onClick={handleLinkClick}>Edit</button>
-                <button onClick={() => deleteData(id, field)}>Delete</button>
-            </td>
-        </tr>
+        <ThemeProvider theme={theme}>
+            <tr>
+                <td>{id}</td>
+                <td>{field}</td>
+                <td>
+                    <Button 
+                        onClick={handleLinkClick}
+                        variant="text"
+                        size="small"
+                        startIcon={<EditIcon />}
+                    >
+                        Edit
+                    </Button>
+
+                    <Button 
+                        onClick={() => deleteData(id, field)} 
+                        variant="text"
+                        size="small"
+                        startIcon={<DeleteIcon />}
+                    >
+                        Delete
+                    </Button>
+                </td>
+            </tr>
+        </ThemeProvider>
     );
 };
 

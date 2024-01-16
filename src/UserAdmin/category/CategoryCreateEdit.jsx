@@ -2,6 +2,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
 import { errorMessage } from "../../helpers/errorMessage";
+import { SendClearButtons } from "../../components/SendClearButtons";
+
 
 export function CategoryCreateEdit({ edit }) {
     /* Shows a form to create o edit a Category register */
@@ -79,7 +81,7 @@ export function CategoryCreateEdit({ edit }) {
 
     return (
         <div className="center">
-            <h1>Category</h1>
+            <h1 className="create-edit-title">Category</h1>
             <form>
                 <label htmlFor="name">Name: </label>
                 <input
@@ -99,8 +101,12 @@ export function CategoryCreateEdit({ edit }) {
                     value={formData.description ?? ""}
                 />
                 <br />
-                <input type="button" value="Send" onClick={handleSubmit} />
-                <input type="reset" value="Clear" onClick={handleReset} />
+
+                <SendClearButtons
+                    handleSubmit={handleSubmit}
+                    handleReset={handleReset}
+                />
+
             </form>
             {error && <p className="error">{error}</p>}
         </div>

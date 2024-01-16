@@ -4,6 +4,9 @@ import TurnContext from "../context/ManageTurnContext";
 import { useWebSocket } from "../context/WebSocketContext";
 import { useAuth } from "../context/AuthContext";
 import { errorMessage } from "../helpers/errorMessage";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import "../styles/main.css";
 
 export function NextTurn() {
@@ -26,6 +29,14 @@ export function NextTurn() {
         message: "One turn has been required",
         style: "success",
     };
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#34495E",
+            },
+        },
+    });
 
     //Update Turn Notification Table
     const webSocketMessage = () => {
@@ -53,17 +64,25 @@ export function NextTurn() {
 
     return (
         <div>
-            <button className="principal_button" onClick={handleSubmit}>
-                Call Next Turn
-            </button>
-            <div>
-                <h4>Message: </h4>
-                {/* <button onClick={webSocketMessage}>Send Message</button> */}
-                {nextMessage && (
-                    <p className={nextMessage.style}>{nextMessage.message}</p>
-                )}
-                {error && <p className="error">{error}</p>}
-            </div>
+            <ThemeProvider theme={theme}>
+                <Button 
+                    onClick={handleSubmit}
+                    variant="contained"
+                    size="small"
+                    endIcon={<NotificationsIcon />}
+                >
+                    Call The Next Turn
+                </Button>
+
+                <div>
+                    <h4>Message: </h4>
+                    {/* <button onClick={webSocketMessage}>Send Message</button> */}
+                    {nextMessage && (
+                        <p className={nextMessage.style}>{nextMessage.message}</p>
+                    )}
+                    {error && <p className="error">{error}</p>}
+                </div>
+            </ThemeProvider>
         </div>
     );
 }

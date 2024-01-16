@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, patchData, postData } from "../../helpers/axios";
 import { errorMessage } from "../../helpers/errorMessage";
+import { SendClearButtons } from "../../components/SendClearButtons";
 
 export function UserCreateEdit({ edit }) {
     /* Shows a form to create o edit a User register */
@@ -112,7 +113,7 @@ export function UserCreateEdit({ edit }) {
 
     return (
         <div className="center">
-            <h1>Users update</h1>
+            <h1 className="create-edit-title">Users update</h1>
             <form>
                 <label htmlFor="email">Email: </label>
                 <input
@@ -184,8 +185,10 @@ export function UserCreateEdit({ edit }) {
                     Is active
                 </label>
                 <br />
-                <input type="button" value="Send" onClick={handleSubmit} />
-                <input type="reset" value="Clear" onClick={handleReset} />
+                <SendClearButtons
+                    handleSubmit={handleSubmit}
+                    handleReset={handleReset}
+                />
             </form>
             {error && <p className="error">{error}</p>}
         </div>

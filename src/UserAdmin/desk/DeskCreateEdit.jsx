@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../helpers/axios";
 import api from "../../helpers/axios";
 import { errorMessage } from "../../helpers/errorMessage";
+import { SendClearButtons } from "../../components/SendClearButtons";
 
 export function DeskCreateEdit({ edit }) {
     /* Shows a form to create o edit a Desk (Service point) register */
@@ -138,7 +139,7 @@ export function DeskCreateEdit({ edit }) {
 
     return (
         <div className="center">
-            <h1>Service Desk</h1>
+            <h1 className="create-edit-title">Service Desk</h1>
             <form>
                 <label htmlFor="name">Name: </label>
                 <input
@@ -199,8 +200,10 @@ export function DeskCreateEdit({ edit }) {
                     Busy
                 </label>
                 <br />
-                <input type="button" value="Send" onClick={handleSubmit} />
-                <input type="reset" value="Clear" onClick={handleReset} />
+                <SendClearButtons
+                    handleSubmit={handleSubmit}
+                    handleReset={handleReset}
+                />
             </form>
             {error && <p className="error">{error}</p>}
         </div>

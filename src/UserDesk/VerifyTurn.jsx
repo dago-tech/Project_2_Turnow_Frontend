@@ -4,8 +4,12 @@ import TurnContext from "../context/ManageTurnContext";
 import { useWebSocket } from "../context/WebSocketContext";
 import { putData } from "../helpers/axios";
 import { useAuth } from "../context/AuthContext";
-import "../styles/main.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import NotesIcon from "@mui/icons-material/Notes";
+import ClearIcon from "@mui/icons-material/Clear";
 import { errorMessage } from "../helpers/errorMessage";
+import "../styles/main.css";
 
 export function VerifyTurn() {
     /*Renders an input text to enter client's turn in order to validate if it is the same
@@ -33,6 +37,14 @@ export function VerifyTurn() {
     const initialData = {
         turn_number: "",
     };
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#34495E",
+            },
+        },
+    });
 
     const [data, setData] = useState(initialData);
     const [error, setError] = useState("");
@@ -81,35 +93,47 @@ export function VerifyTurn() {
 
     return (
         <div>
-            <form>
-                <label htmlFor="turn_number">Turn number: </label>
-                <input
-                    type="text"
-                    name="turn_number"
-                    onChange={handleChange}
-                    value={data.turn_number}
-                />
-                <br />
-                <br />
-                <input type="reset" value="Clear" onClick={handleReset} />
-                <br />
-                <br />
-                <input
-                    className="principal_button"
-                    type="button"
-                    value="Verify Turn Number"
-                    onClick={handleSubmit}
-                />
-            </form>
-            <div>
-                <h4>Message: </h4>
-                {verifyMessage && (
-                    <p className={verifyMessage.style}>
-                        {verifyMessage.message}
-                    </p>
-                )}
-                {error && <p className="error">{error}</p>}
-            </div>
+            <ThemeProvider theme={theme}>
+                <form>
+                    <label htmlFor="turn_number">Turn number: </label>
+                    <input
+                        type="text"
+                        name="turn_number"
+                        onChange={handleChange}
+                        value={data.turn_number}
+                    />
+                    <br />
+                    <br />
+                    <Button
+                        type="button"
+                        variant="contained"
+                        size="small"
+                        startIcon={<ClearIcon />}
+                        onClick={handleReset}
+                    >
+                        Clear
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                        onClick={handleSubmit}
+                        variant="contained"
+                        size="small"
+                        endIcon={<NotesIcon />}
+                    >
+                        Verify Turn Number
+                    </Button>
+                </form>
+                <div>
+                    <h4>Message: </h4>
+                    {verifyMessage && (
+                        <p className={verifyMessage.style}>
+                            {verifyMessage.message}
+                        </p>
+                    )}
+                    {error && <p className="error">{error}</p>}
+                </div>
+            </ThemeProvider>
         </div>
     );
 }

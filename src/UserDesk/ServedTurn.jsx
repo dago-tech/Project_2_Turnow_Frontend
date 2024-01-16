@@ -3,11 +3,14 @@ import TurnContext from "../context/ManageTurnContext";
 import { putData } from "../helpers/axios";
 import { useAuth } from "../context/AuthContext";
 import { errorMessage } from "../helpers/errorMessage";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import CheckIcon from "@mui/icons-material/Check";
 
 export function ServedTurn() {
     /* Mark current turn as served or attended */
-    
-    const { thisDeskId } = useAuth()
+
+    const { thisDeskId } = useAuth();
     const endpoint = `turn/served/${thisDeskId}/`;
     const [error, setError] = useState("");
 
@@ -28,9 +31,15 @@ export function ServedTurn() {
         style: "success",
     };
 
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: "#34495E",
+            },
+        },
+    });
 
     const handleSubmit = () => {
-
         putData(endpoint)
             .then(() => {
                 setServedMessage(successMessage);
@@ -46,15 +55,26 @@ export function ServedTurn() {
 
     return (
         <div>
-            <button className="principal_button" onClick={handleSubmit}>
-                Attention finished
-            </button>
+            <ThemeProvider theme={theme}>
+                <Button
+                    onClick={handleSubmit}
+                    variant="contained"
+                    size="small"
+                    endIcon={<CheckIcon />}
+                >
+                    Attention finished
+                </Button>
 
-            <div>
-                <h4>Message: </h4>
-                {servedMessage && <p className={servedMessage.style}>{servedMessage.message}</p>}
-                {error && <p className="error">{error}</p>}
-            </div>
+                <div>
+                    <h4>Message: </h4>
+                    {servedMessage && (
+                        <p className={servedMessage.style}>
+                            {servedMessage.message}
+                        </p>
+                    )}
+                    {error && <p className="error">{error}</p>}
+                </div>
+            </ThemeProvider>
         </div>
     );
 }
