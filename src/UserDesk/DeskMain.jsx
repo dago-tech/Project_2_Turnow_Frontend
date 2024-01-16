@@ -93,7 +93,7 @@ export function DeskMain() {
                 </nav>
             </div>
 
-            <div style={{ flex: 5, marginRight: "15vw" }}>
+            <div style={{ flex: 5, marginRight: "5vw" }}>
                 <BackButton />
                 {error && <p className="error">{error}</p>}
                 {message == "desk_name" ? (
