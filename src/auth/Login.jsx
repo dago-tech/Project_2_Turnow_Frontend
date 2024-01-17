@@ -7,6 +7,8 @@ import { errorMessage } from "../helpers/errorMessage";
 import "../styles/main.css";
 
 const Login = () => {
+    /*Login form, it gets tokens from backend */
+
     const history = useNavigate();
     const initialFormData = {
         email: "",

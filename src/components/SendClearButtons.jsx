@@ -5,7 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 import ClearIcon from '@mui/icons-material/Clear';
 
 export function SendClearButtons({handleSubmit, handleReset}) {
-    
+    /*Renders Send and clear buttons for forms */
     const theme = createTheme({
         palette: {
             primary: {
