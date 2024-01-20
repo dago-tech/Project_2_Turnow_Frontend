@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { postData } from "../helpers/axios";
-import { deleteCookie } from "../helpers/cookies";
 import { errorMessage } from "../helpers/errorMessage";
-import "../styles/main.css";
 import { useAuth } from "../context/AuthContext";
+import Cookies from 'js-cookie';
+import "../styles/main.css";
 
 export default function Logout() {
     /*Logout the user and delete tokens */
@@ -14,7 +14,7 @@ export default function Logout() {
         useAuth();
 
     useEffect(() => {
-        deleteCookie("userEmail");
+        Cookies.remove('userEmail');
         // Send token to backend backlist so it is not used again
         postData("/user/logout/blacklist/", {
             refresh_token: localStorage.getItem("refresh_token"),

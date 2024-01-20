@@ -24,12 +24,12 @@ export function Header() {
 
             <div>
                 <ul className="header-list">
-                    {condition3 && (<li>
+                    {condition3 ? (<li>
                         <Link to="/login">Login</Link>
-                    </li>)}
+                    </li>):(
                     <li>
                         <Link to="/logout">Logout</Link>
-                    </li>
+                    </li>)}
                 </ul>
             </div>
         </div>

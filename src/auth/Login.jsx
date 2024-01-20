@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getData, postData } from "../helpers/axios";
 import { useAuth } from "../context/AuthContext";
-import { setCookie } from "../helpers/cookies";
+import Cookies from 'js-cookie';
 import { errorMessage } from "../helpers/errorMessage";
 import "../styles/main.css";
 
@@ -57,7 +57,7 @@ const Login = () => {
             .then((response) => {
                 setIsAdmin(response.is_admin);
                 setUserEmail(response.email);
-                setCookie("userEmail", response.email, 1);
+                Cookies.set('userEmail', response.email, { expires: 1, secure: false });
             })
             .catch((error) => {
                 setError(errorMessage(error));
