@@ -19,8 +19,8 @@ export default function Logout() {
         postData("/user/logout/blacklist/", {
             refresh_token: localStorage.getItem("refresh_token"),
         }).then(() => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
+            Cookies.remove('access_token');
+            Cookies.remove('refresh_token');
             setIsAuthenticated(false);
             setIsAdmin(false);
             setUserId("");

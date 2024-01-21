@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-//import { getCookieValue } from "../helpers/cookies";
 import { checkAuthentication } from "../helpers/checkAuth";
 import Cookies from 'js-cookie';
 
@@ -45,7 +44,6 @@ export const AuthProvider = ({ children }) => {
                 setIsAdmin(false);
             });
 
-        //setUserEmail(getCookieValue("userEmail") || null);
         setUserEmail(Cookies.get('userEmail') || null);
     }, []);
 

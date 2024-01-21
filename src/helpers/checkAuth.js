@@ -1,9 +1,10 @@
 import { getData } from "./axios";
+import Cookies from 'js-cookie';
 
 export const checkAuthentication = async () => {
     /* Checks for user authentication based on storage access token */
 
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = Cookies.get("access_token")
     const result = {
         authenticated : false,
         isAdmin : false

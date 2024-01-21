@@ -43,8 +43,8 @@ const Login = () => {
         })
             //Get the two tokens and send them to localStorage
             .then((response) => {
-                localStorage.setItem("access_token", response.access);
-                localStorage.setItem("refresh_token", response.refresh);
+                Cookies.set('access_token', response.access, { expires: 1, secure: false });
+                Cookies.set('refresh_token', response.refresh, { expires: 1, secure: false });
 
                 const token = response.access;
                 const tokenParts = JSON.parse(atob(token.split(".")[1]));

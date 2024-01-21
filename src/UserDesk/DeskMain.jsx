@@ -9,6 +9,7 @@ import { getData, putData } from "../helpers/axios";
 import BackButton from "../components/BackButton";
 import { TurnCreateEdit } from "../UserAdmin/turn/TurnCreateEdit";
 import { errorMessage } from "../helpers/errorMessage";
+import Cookies from 'js-cookie';
 
 export function DeskMain() {
     /* Shows the desk user main page, a desk user will be able to call for a new turn 
@@ -21,7 +22,7 @@ export function DeskMain() {
     const [error, setError] = useState("");
 
     useEffect(() => {
-        const token = localStorage.getItem("access_token");
+        const token = Cookies.get("access_token")
 
         if (token) {
             const tokenParts = JSON.parse(atob(token.split(".")[1]));
