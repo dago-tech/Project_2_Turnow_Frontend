@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { WebSocketProvider } from "./context/WebSocketContext";
-import { AuthProvider } from "./context/AuthContext";
+import { WebSocketProvider } from "./components/context/WebSocketContext";
+import { AuthProvider } from "./components/context/AuthContext";
 import { Home } from "./components/Home";
-import PrivateRoute from "./auth/PrivateRoute";
-import Login from "./auth/Login";
-import Logout from "./auth/Logout";
-import { Notification } from "./Notification/Notification";
-import { Clients } from "./Clients/Clients";
-import { DeskMain } from "./UserDesk/DeskMain";
-import { AdminMain } from "./UserAdmin/AdminMain";
+import PrivateRoute from "./components/auth/PrivateRoute";
+import Login from "./components/auth/Login";
+import Logout from "./components/auth/Logout";
+import { Notification } from "./components/Notification/Notification";
+import { Clients } from "./components/Clients/Clients";
+import { DeskMain } from "./components/userDesk/DeskMain";
+import { AdminMain } from "./components/userAdmin/AdminMain";
 
 
 function App() {
