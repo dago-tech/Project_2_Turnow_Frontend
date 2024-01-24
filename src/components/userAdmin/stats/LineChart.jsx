@@ -24,18 +24,24 @@ ChartJS.register(
 
 function LineChart({ dataset }) {
 
+
   const data = {
-    labels: dataset.map((data) => data.year),
+    labels: dataset.map((data) => data.turn_number),
     datasets: [
       {
-        label: "Users Gained",
-        data: dataset.map((data) => data.userGain),
+        label: "Waiting time",
+        data: dataset.map((data) => data.waiting_time),
         backgroundColor: [
           "rgba(75,192,192,1)",
-          "#ecf0f1",
-          "#50AF95",
-          "#f3ba2f",
-          "#2a71d0",
+        ],
+        borderColor: "black",
+        borderWidth: 2,
+      },
+      {
+        label: "Attention time",
+        data: dataset.map((data) => data.duration),
+        backgroundColor: [
+          "#b01d36",
         ],
         borderColor: "black",
         borderWidth: 2,

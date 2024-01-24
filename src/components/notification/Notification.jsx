@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getData } from "../../helpers/axios";
 import { useWebSocket } from "../context/WebSocketContext";
 import BackButton from "../BackButton";
-import Loader from "../dataTable/Loader";
+import Loader from "../shared/Loader";
 import { errorMessage } from "../../helpers/errorMessage";
 
 export function Notification() {

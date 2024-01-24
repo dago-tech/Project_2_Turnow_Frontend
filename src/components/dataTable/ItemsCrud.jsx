@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import ItemsTable from "./ItemsTable";
 import { getData, deleteData } from "../../helpers/axios";
 import { errorMessage } from "../../helpers/errorMessage";
-import Loader from "./Loader";
+import Loader from "../shared/Loader";
 
 const ItemsCrud = ({ endpoint, displayField }) => {
   /*Renders a table with information based on the required backend endpoint */

@@ -1,5 +1,5 @@
 import React from "react";
-import "./Loader.css";
+import "../../styles/loader.css";
 
 const Loader = () => {
   /*Containers used to create a Loading animation */
