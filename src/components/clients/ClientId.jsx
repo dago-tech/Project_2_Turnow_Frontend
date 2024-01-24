@@ -8,174 +8,156 @@ import { errorMessage } from "../../helpers/errorMessage";
 import "../../styles/main.css";
 
 export function ClientId() {
-    /*Shows a keypad and an Id type selector to introduce cleint data to get a new turn */
+  /*Shows a keypad and an Id type selector to introduce cleint data to get a new turn */
 
-    const history = useNavigate();
-    const endpoint = "client/create/";
+  const history = useNavigate();
+  const endpoint = "client/create/";
 
-    const [idType, setIdType] = useState("");
-    const [idNumber, setIdNumber] = useState("");
-    const [selected, setSelected] = useState("");
-    const [error, setError] = useState("");
-    const { setIdClient } = useContext(ClientContext);
+  const [idType, setIdType] = useState("");
+  const [idNumber, setIdNumber] = useState("");
+  const [selected, setSelected] = useState("");
+  const [error, setError] = useState("");
+  const { setIdClient } = useContext(ClientContext);
 
-    const handleSelection = (type) => {
-        setIdType(type);
-        setSelected(type);
+  const handleSelection = (type) => {
+    setIdType(type);
+    setSelected(type);
+  };
+
+  const handleClick = (number) => {
+    setIdNumber((prevNumber) => prevNumber + number);
+  };
+
+  const handleErase = () => {
+    setIdNumber((prevNumber) => prevNumber.slice(0, -1));
+  };
+
+  const handleSubmit = () => {
+    const data = {
+      id_type: idType,
+      personal_id: idNumber,
     };
 
-    const handleClick = (number) => {
-        setIdNumber((prevNumber) => prevNumber + number);
-    };
+    postData(endpoint, data)
+      .then((response) => {
+        setIdClient(response.id);
+        setError(null);
+        history({
+          pathname: "/client/priority/",
+        });
+      })
+      .catch((error) => {
+        setError(errorMessage(error));
+      });
+  };
 
-    const handleErase = () => {
-        setIdNumber((prevNumber) => prevNumber.slice(0, -1));
-    };
+  return (
+    <>
+      <div style={{ textAlign: "left" }}>
+        <BackButton />
+      </div>
+      <div className={"container"}>
+        <div style={{ margin: 20, textAlign: "right" }}>
+          <h2>Identification type:</h2>
+          <ul style={{ padding: 0 }}>
+            <li>
+              <button
+                onClick={() => handleSelection("cedula")}
+                className={`${
+                  selected === "cedula" ? "selected" : ""
+                } id_button`}
+              >
+                Cédula de Ciudadanía
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => handleSelection("tarjeta_identidad")}
+                className={`${
+                  selected === "tarjeta_identidad" ? "selected" : ""
+                } id_button`}
+              >
+                Tarjeta de Identidad
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => handleSelection("pasaporte")}
+                className={`${
+                  selected === "pasaporte" ? "selected" : ""
+                } id_button`}
+              >
+                Pasaporte
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => handleSelection("cedula_extrangería")}
+                className={`${
+                  selected === "cedula_extrangería" ? "selected" : ""
+                } id_button`}
+              >
+                Cedula de Extrangería
+              </button>
+            </li>
+          </ul>
+        </div>
 
-    const handleSubmit = () => {
-        const data = {
-            id_type: idType,
-            personal_id: idNumber,
-        };
+        <div style={{ textAlign: "center", width: "200px" }}>
+          <h2>Enter your ID number:</h2>
+          <div
+            style={{
+              minHeight: "40px",
+              width: "120px",
+              border: "1px solid #ccc",
+              marginBottom: "10px",
+              margin: "auto",
+            }}
+          >
+            <p style={{ margin: 0, padding: "10px" }}>{idNumber}</p>
+          </div>
+          <div>
+            {/* Numeric keyboard in a table */}
+            <table style={{ margin: "auto" }}>
+              <tbody>
+                {[0, 1, 2].map((row) => (
+                  <tr key={row}>
+                    {[1, 2, 3].map((column) => {
+                      const number = row * 3 + column;
+                      return (
+                        <td key={column} className="no_borders">
+                          <button onClick={() => handleClick(number)}>
+                            {number}
+                          </button>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+                <tr>
+                  <td className="no_borders">
+                    <button onClick={() => handleClick(0)}>0</button>
+                  </td>
+                  <td colSpan="2" className="no_borders">
+                    <button onClick={handleErase}>Erase</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {error && <p className="error">{error}</p>}
+      </div>
 
-        postData(endpoint, data)
-            .then((response) => {
-                setIdClient(response.id);
-                setError(null);
-                history({
-                    pathname: "/client/priority/",
-                });
-            }).catch((error) => {
-                setError(errorMessage(error));
-            });    
-    };
-
-    return (
-        <>
-            <div style={{ textAlign: "left" }}>
-                <BackButton />
-            </div>
-            <div className={"container"}>
-                <div style={{ margin: 20, textAlign: "right" }}>
-                    <h2>Identification type:</h2>
-                    <ul style={{ padding: 0 }}>
-                        <li>
-                            <button
-                                onClick={() => handleSelection("cedula")}
-                                className={`${
-                                    selected === "cedula" ? "selected" : ""
-                                } id_button`}
-                            >
-                                Cédula de Ciudadanía
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                onClick={() =>
-                                    handleSelection("tarjeta_identidad")
-                                }
-                                className={`${
-                                    selected === "tarjeta_identidad"
-                                        ? "selected"
-                                        : ""
-                                } id_button`}
-                            >
-                                Tarjeta de Identidad
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                onClick={() => handleSelection("pasaporte")}
-                                className={`${
-                                    selected === "pasaporte" ? "selected" : ""
-                                } id_button`}
-                            >
-                                Pasaporte
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                onClick={() =>
-                                    handleSelection("cedula_extrangería")
-                                }
-                                className={`${
-                                    selected === "cedula_extrangería"
-                                        ? "selected"
-                                        : ""
-                                } id_button`}
-                            >
-                                Cedula de Extrangería
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-
-                <div style={{ textAlign: "center", width: "200px" }}>
-                    <h2>Enter your ID number:</h2>
-                    <div
-                        style={{
-                            minHeight: "40px",
-                            width: "120px",
-                            border: "1px solid #ccc",
-                            marginBottom: "10px",
-                            margin: "auto",
-                        }}
-                    >
-                        <p style={{ margin: 0, padding: "10px" }}>{idNumber}</p>
-                    </div>
-                    <div>
-                        {/* Numeric keyboard in a table */}
-                        <table style={{ margin: "auto" }}>
-                            <tbody>
-                                {[0, 1, 2].map((row) => (
-                                    <tr key={row}>
-                                        {[1, 2, 3].map((column) => {
-                                            const number = row * 3 + column;
-                                            return (
-                                                <td
-                                                    key={column}
-                                                    className="no_borders"
-                                                >
-                                                    <button
-                                                        onClick={() =>
-                                                            handleClick(number)
-                                                        }
-                                                    >
-                                                        {number}
-                                                    </button>
-                                                </td>
-                                            );
-                                        })}
-                                    </tr>
-                                ))}
-                                <tr>
-                                    <td className="no_borders">
-                                        <button onClick={() => handleClick(0)}>
-                                            0
-                                        </button>
-                                    </td>
-                                    <td colSpan="2" className="no_borders">
-                                        <button onClick={handleErase}>
-                                            Erase
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {error && <p className="error">{error}</p>}
-            </div>
-                                       
-            <div style={{ textAlign: "right" }}>
-                <button
-                    className={"next_button"}
-                    onClick={handleSubmit}
-                    disabled={!idType || !idNumber}
-                >
-                    Next
-                </button>
-            </div>
-        </>
-    );
+      <div style={{ textAlign: "right" }}>
+        <button
+          className={"next_button"}
+          onClick={handleSubmit}
+          disabled={!idType || !idNumber}
+        >
+          Next
+        </button>
+      </div>
+    </>
+  );
 }

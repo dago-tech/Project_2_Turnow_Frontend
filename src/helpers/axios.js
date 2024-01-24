@@ -134,7 +134,7 @@ api.interceptors.response.use(
                 "JWT " + response.data.access;
               originalRequest.headers["Authorization"] =
                 "JWT " + response.data.access;
-              console.log("Token renovado")
+              console.log("Token renovado");
               return api(originalRequest);
             })
             .catch((err) => {

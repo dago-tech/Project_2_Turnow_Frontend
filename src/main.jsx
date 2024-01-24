@@ -7,8 +7,8 @@ Modal.setAppElement("#root");
 
 /*Create the ReactDOM root in the HTML element and renders the main component*/
 ReactDOM.createRoot(document.getElementById("root")).render(
-    /*React.StrictMode makes components to be rendered twice, only in dev mode */
-    // <React.StrictMode>
-    <App />
-    //</React.StrictMode>,
+  /*React.StrictMode makes components to be rendered twice, only in dev mode */
+  // <React.StrictMode>
+  <App />
+  //</React.StrictMode>,
 );
