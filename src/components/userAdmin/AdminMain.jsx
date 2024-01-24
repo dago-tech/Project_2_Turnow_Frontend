@@ -14,6 +14,7 @@ import { DeskCreateEdit } from "./desk/DeskCreateEdit";
 import { UserCreateEdit } from "./user/UserCreateEdit";
 import { TurnCreateEdit } from "./turn/TurnCreateEdit";
 import BackButton from "../BackButton";
+import StatsMain from "./stats/StatsMain";
 
 export function AdminMain() {
   /* Shows the admin main page, an admin user will be able to create and edit registers of
@@ -49,6 +50,9 @@ export function AdminMain() {
             <br />
             <li>
               <Link to="/notification">Turn notification</Link>
+            </li>
+            <li>
+              <Link to="/user_admin/stats">Statistics</Link>
             </li>
             <br />
             <li>
@@ -100,6 +104,7 @@ export function AdminMain() {
             path="/turn/edit/:id"
             element={<TurnCreateEdit edit={true} />}
           />
+          <Route path="/stats" element={<StatsMain />} />
 
           {/* <Route path="*" element={<Error404 />} /> */}
         </Routes>

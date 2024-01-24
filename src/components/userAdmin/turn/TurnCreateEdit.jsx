@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, patchData } from "../../../helpers/axios";
 import { errorMessage } from "../../../helpers/errorMessage";
-import { SendClearButtons } from "../../SendClearButtons";
+import { SendClearButtons } from "../../dataTable/SendClearButtons";
 
 export function TurnCreateEdit({ edit }) {
   /* Shows a form to create o edit a turn register */

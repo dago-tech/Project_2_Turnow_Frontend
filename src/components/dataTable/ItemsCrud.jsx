@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import ItemsTable from "./ItemsTable";
-import { getData, deleteData } from "../helpers/axios";
-import { errorMessage } from "../helpers/errorMessage";
+import { getData, deleteData } from "../../helpers/axios";
+import { errorMessage } from "../../helpers/errorMessage";
 import Loader from "./Loader";
 
 const ItemsCrud = ({ endpoint, displayField }) => {

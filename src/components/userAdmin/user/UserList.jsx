@@ -1,4 +1,4 @@
-import ItemsCrud from "../../ItemsCrud";
+import ItemsCrud from "../../dataTable/ItemsCrud";
 
 export function UserList() {
   /* Shows a list of created and stored users*/

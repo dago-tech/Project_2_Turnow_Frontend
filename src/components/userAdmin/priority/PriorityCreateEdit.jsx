@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getData, postData, putData } from "../../../helpers/axios";
 import { errorMessage } from "../../../helpers/errorMessage";
-import { SendClearButtons } from "../../SendClearButtons";
+import { SendClearButtons } from "../../dataTable/SendClearButtons";
 
 export function PriorityCreateEdit({ edit }) {
   /* Shows a form to create o edit a priority register */
