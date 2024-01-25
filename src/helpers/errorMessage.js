@@ -12,7 +12,12 @@ export const errorMessage = (error) => {
       // Extract the first element of the array as an error message
       message = responseData[0];
     } else if (typeof responseData === "string") {
-      message = responseData;
+      if (responseData.startsWith("<!DOCTYPE")) {
+        //Si el error es un HTML
+        message = error.message;
+      } else {
+        message = responseData;
+      }
     } else if (typeof responseData === "object") {
       // Find the first property within 'responseData' that is an array or a string
       const errorProperty = Object.keys(responseData).find(
@@ -22,15 +27,23 @@ export const errorMessage = (error) => {
       );
 
       // Extract the first element of the array or use the string as an error message
-      message =
-        errorProperty !== undefined
-          ? Array.isArray(responseData[errorProperty])
-            ? responseData[errorProperty][0]
-            : responseData[errorProperty]
-          : `Error: ${error.message}`;
+      if (errorProperty !== undefined) {
+        if (Array.isArray(responseData[errorProperty])) {
+          //If it is an array
+          const errorKey = errorProperty;
+          const errorKeyCapitalized =
+            errorKey.charAt(0).toUpperCase() + errorKey.slice(1);
+
+          message = `${errorKeyCapitalized}: ${responseData[errorProperty][0]}`;
+        } else {
+          message = responseData[errorProperty];
+        }
+      } else {
+        message = `Error: ${error.message}`;
+      }
     } else {
-      message = `Error: ${error.message}`;
-    }
+      message = error.message || "System error";
+    } 
   } else {
     message = error.message || "System error";
   }

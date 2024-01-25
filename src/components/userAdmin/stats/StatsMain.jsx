@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import LineChart from './LineChart'
-import { UserData } from "./data"
 import { getData } from '../../../helpers/axios';
 import { errorMessage } from '../../../helpers/errorMessage';
-import '../../../styles/stats.css'
 import Loader from '../../shared/Loader';
+import '../../../styles/stats.css'
 
 function StatsMain() {
 
@@ -37,7 +36,7 @@ function StatsMain() {
           {loading && <Loader />}
           {error && <p className="error">{error}</p>}
           {data && (
-            <LineChart dataset={data}/>
+            <LineChart dataset={data} title={"Waiting and attention time"}/>
           )}
         
         </div>
