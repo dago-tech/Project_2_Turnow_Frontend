@@ -1,27 +1,11 @@
-import React from "react";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import React, { useState } from "react";
+import ChartComponent from "./ChartComponent";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
-function LineChart({ dataset, title }) {
+function ChartContainer({ dataset, title }) {
+
+  const [type, setType] = useState("line");
+
   if (dataset.length === 0) {
     return <div>There is no data to show</div>;
   }
@@ -58,7 +42,24 @@ function LineChart({ dataset, title }) {
     },
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <>
+      <div className="options">       
+        <label htmlFor="type">Type:</label>
+        <select
+          id="type"
+          name="type"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="line">Line</option>
+          <option value="bar">Bar</option>
+        </select>
+      </div>
+      <ChartComponent data={data} options={options} chartType={type}/>
+    </>
+  )
+    
 }
 
-export default LineChart;
+export default ChartContainer;

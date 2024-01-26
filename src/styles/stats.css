@@ -1,3 +1,33 @@
-.line-chart {
-    width: 500px;
+.container {/*Crea columnas de 240 y hace autofill para que se 
+  vaya llenando dependiendo del ancho de la pantalla*/
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 450px);
+  gap: 25px; /*Le da el espacio entre todos los contenedores*/
+  place-content: center;/*Ubica en el centro todas las cards*/
+}
+.item {
+  width: 450px;
+  border: 1px solid #ccc;
+}
+
+.item-aux {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-element {
+  order: -1; 
+}
+
+.options {
+  text-align: right;
+}
+
+.title {
+  text-align: center;
+}
+
+.checkbox {
+  margin: 15px;
 }

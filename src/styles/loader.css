@@ -1,6 +1,11 @@
-.lds-ring {
+/* .lds-ring {
   display: inline-block;
   position: relative;
+  width: 80px;
+  height: 80px;
+} */
+.lds-ring {
+  margin: auto;
   width: 80px;
   height: 80px;
 }

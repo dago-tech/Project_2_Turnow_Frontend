@@ -63,7 +63,7 @@ export function AdminMain() {
       </div>
       {/* flex: 1 and flex: 5 means total width will be divided into 6 sections */}
       {/* 1vw viewport width represents 1% of browser width */}
-      <div style={{ flex: 5, marginRight: "15vw" }}>
+      <div style={{ flex: 5, marginRight: "5vw" }}>
         <BackButton />
         <Routes>
           <Route path="/" element={<AdminHome />} />
