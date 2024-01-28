@@ -3,28 +3,31 @@ import { getData } from '../../../helpers/axios';
 import { errorMessage } from '../../../helpers/errorMessage';
 import '../../../styles/stats.css'
 import ChartTable from './ChartTable';
+import { utcToZonedTime } from 'date-fns-tz';
+import { format } from 'date-fns';
 
 function StatsMain() {
 
   const [data, setData] = useState({});
+  const [initialStartDate, setInitialStartDate] = useState('');
+  const [initialEndDate, setInitialEndDate] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const checkboxes = [
-    { label: 'waiting', endpoint: 'stats/waiting_time/?start_date=2024-01-01&end_date=2024-01-30' },
-    { label: 'waiting2', endpoint: 'stats/waiting_time_des/?start_date=2024-01-01&end_date=2024-01-30' },
-    { label: 'waiting3', endpoint: 'stats/waiting_time_desk/?start_date=2024-01-01&end_date=2024-01-30' },
-    { label: 'waiting4', endpoint: 'stats/waiting_time_des/?start_date=2024-01-01&end_date=2024-01-30' },
-    { label: 'W5', endpoint: 'stats/waiting_time_desk/?start_date=2024-01-01&end_date=2024-01-30' },
+    { label: 'Turns', endpoint: 'stats/waiting_time/' },
+    { label: 'Service desks', endpoint: 'stats/waiting_time_desk/' },
+    { label: 'waiting3', endpoint: 'stats/waiting_time_desk/' },
+    { label: 'waiting4', endpoint: 'stats/waiting_time_des/' },
+    { label: 'W5', endpoint: 'stats/waiting_time_desk/' },
   ];
 
   const [activeCheckboxes, setActiveCheckboxes] = useState([]); // Estado para rastrear los checkboxes activos
 
   const getDataSet = async (endpoint, label) => {
-    // Llama a tu API con el endpoint proporcionado
+    // API request
     try {
       const response = await getData(endpoint);
-      //const jsonData = await response.json();
       setData((prevData) => ({ ...prevData, [label]: response }));
       console.log(response)
     } catch (error) {
@@ -35,36 +38,61 @@ function StatsMain() {
   };
 
   useEffect(() => {
-    // Llama a la API cuando se activa/desactiva un checkbox
+
+    //Obtener la fecha actual
+    const fechaActual = new Date();
+    const fechaAnterior = new Date();
+    fechaAnterior.setDate(fechaAnterior.getDate() - 7);
+    const currentFechaGMT5 = utcToZonedTime(fechaActual, "America/New_York");
+    const beforeFechaGMT5 = utcToZonedTime(fechaAnterior, "America/New_York");
+    const currentFormattedDate = format(currentFechaGMT5, "yyyy-MM-dd'T'HH:mm");
+    const beforeFormattedDate = format(beforeFechaGMT5, "yyyy-MM-dd'T'HH:mm");
+    console.log(currentFormattedDate, beforeFormattedDate)
+    // Actualizar el estado con la fecha formateada
+    setInitialStartDate(beforeFormattedDate);
+    setInitialEndDate(currentFormattedDate);
+
+    // API request when activeCheckboxes changes 
     activeCheckboxes.forEach((index) => {
       const { endpoint, label } = checkboxes[index];
       if (!data[label]) {
-        console.log("Entró a useEffect")
         setLoading(true);
-        getDataSet(endpoint, label);
+        getDataSet(`${endpoint}?start_date=${initialStartDate}&end_date=${initialEndDate}`, label);
       }
     });
   }, [activeCheckboxes]);
 
   const handleCheckboxChange = (index) => {
-    // Maneja el cambio de estado de los checkboxes
+
     const updatedCheckboxes = [...activeCheckboxes];
     const { endpoint, label } = checkboxes[index];
     const checkboxIndex = updatedCheckboxes.indexOf(index);
 
     if (checkboxIndex === -1) {
-      // Si el checkbox no está en la lista, agrégalo
+      // If checkbox is not in the list, add it
       updatedCheckboxes.push(index);
     } else {
-      // Si el checkbox está en la lista, quítalo
+      // If checkbox is the list, remove it
       updatedCheckboxes.splice(checkboxIndex, 1);
       const { [label]: deletedEntry, ...restData } = data;
       setData(restData);
       setError(null)
     }
-    console.log(updatedCheckboxes)
 
     setActiveCheckboxes(updatedCheckboxes);
+  };
+
+  const handleFilterClick = (startDate, endDate, label) => {
+    const checkbox = checkboxes.find((el) => el.label===label)
+    console.log(checkbox)
+    const endpoint = checkbox.endpoint
+    console.log(endpoint)
+
+    if (startDate && endDate) {
+      const filteredEndpoint = `${endpoint}?start_date=${startDate}&end_date=${endDate}`;
+      setLoading(true);
+      getDataSet(filteredEndpoint, label);
+    }
   };
   
   return (
@@ -84,7 +112,7 @@ function StatsMain() {
       </div>
 
       <div className='container'>
-        <ChartTable data={data} error={error} loading={loading} />
+        <ChartTable data={data} handleFilterClick={handleFilterClick} error={error} loading={loading} />
       </div>
       
     </div>

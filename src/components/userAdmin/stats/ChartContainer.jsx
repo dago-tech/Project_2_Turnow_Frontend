@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import ChartComponent from "./ChartComponent";
 
-
-function ChartContainer({ dataset, title }) {
-
+function ChartContainer({ dataset, label, handleFilterClick }) {
   const [type, setType] = useState("line");
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  if (dataset.length === 0) {
-    return <div>There is no data to show</div>;
-  }
+  const handleDateChange = (dateType, value) => {
+    // Función para manejar cambios en la fecha y hora
+    if (dateType === 'start') {
+      setStartDate(value);
+    } else if (dateType === 'end') {
+      setEndDate(value);
+    }
+  };
 
   const xAxisLabel = Object.keys(dataset[0])[0]; // Take the first key as x-axis
 
@@ -33,18 +38,22 @@ function ChartContainer({ dataset, title }) {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top',
+        position: "top",
       },
       title: {
         display: true,
-        text: title,
+        text: label,
       },
     },
   };
 
+  if (dataset.length === 0) {
+    return <div>There is no data to show</div>;
+  }
+
   return (
     <>
-      <div className="options">       
+      <div className="options">
         <label htmlFor="type">Type:</label>
         <select
           id="type"
@@ -55,11 +64,29 @@ function ChartContainer({ dataset, title }) {
           <option value="line">Line</option>
           <option value="bar">Bar</option>
         </select>
+
+        <div className='date-filter'>
+          <label htmlFor="start-date">Start Date:</label>
+          <input
+            type="datetime-local" 
+            id="start-date"
+            value={startDate}
+            onChange={(e) => handleDateChange('start', e.target.value)}
+          />
+          <label htmlFor="end-date">End Date:</label>
+          <input
+            type="datetime-local"
+            id="end-date"
+            value={endDate}
+            onChange={(e) => handleDateChange('end', e.target.value)}
+          />
+          <button onClick={() => handleFilterClick(startDate, endDate, label)}>Filter</button>
+        </div>
       </div>
-      <ChartComponent data={data} options={options} chartType={type}/>
+
+      <ChartComponent data={data} options={options} chartType={type} />
     </>
-  )
-    
+  );
 }
 
 export default ChartContainer;

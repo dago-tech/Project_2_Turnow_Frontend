@@ -24,7 +24,7 @@ ChartJS.register(
 );
 
 const ChartComponent = ({ data, options, chartType }) => {
-  // Utiliza la variable chartType para decidir qué tipo de gráfico renderizar
+  // chartType to choose which type of chart to render
   const ChartToRender = chartType === "line" ? Line : Bar;
 
   return (
