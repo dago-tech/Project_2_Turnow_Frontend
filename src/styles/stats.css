@@ -1,10 +1,24 @@
-.container {/*Crea columnas de 240 y hace autofill para que se 
+.container {
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.container h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+.chart-container {
+  /*Crea columnas de 240 y hace autofill para que se 
   vaya llenando dependiendo del ancho de la pantalla*/
   display: grid;
   grid-template-columns: repeat(auto-fill, 450px);
   gap: 25px; /*Le da el espacio entre todos los contenedores*/
-  place-content: center;/*Ubica en el centro todas las cards*/
+  place-content: center; /*Ubica en el centro todas las cards*/
 }
+
 .item {
   width: 450px;
   border: 1px solid #ccc;
@@ -17,17 +31,67 @@
 }
 
 .top-element {
-  order: -1; 
+  order: -1;
 }
 
 .options {
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
 }
 
-.title {
-  text-align: center;
+.type-chart {
+  display: flex;
+  align-items: center;
+  margin: 4px;
+  padding: 4px;
+}
+
+.date-filter {
+  display: grid;
+  grid-template-columns: 80% 20%;
+  margin: 4px;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: 28% 72%;
+  grid-template-rows: 20px 20px;
+  row-gap: 5px;
+}
+
+.filter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type="datetime-local" i] {
+  font-family: "Calibri", sans-serif;
+  font-size: 12px;
+  max-height: 14px;
+}
+
+select {
+  font-size: 12px;
+  /* max-height: 20px; */
+}
+
+button {
+  font-size: 12px;
 }
 
 .checkbox {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 120px);
+  place-content: center;
   margin: 15px;
+}
+
+.checkbox label {
+  font-size: 13px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  padding: 5px;
 }

@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import ChartComponent from "./ChartComponent";
 
-function ChartContainer({ dataset, label, handleFilterClick }) {
-  const [type, setType] = useState("line");
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+function ChartContainer({
+  dataset,
+  label,
+  handleFilterClick,
+  initialStartDate,
+  initialEndDate,
+}) {
+  const [type, setType] = useState("bar");
+  const [startDate, setStartDate] = useState(initialStartDate);
+  const [endDate, setEndDate] = useState(initialEndDate);
 
   const handleDateChange = (dateType, value) => {
     // Función para manejar cambios en la fecha y hora
-    if (dateType === 'start') {
+    if (dateType === "start") {
       setStartDate(value);
-    } else if (dateType === 'end') {
+    } else if (dateType === "end") {
       setEndDate(value);
     }
   };
@@ -54,34 +60,43 @@ function ChartContainer({ dataset, label, handleFilterClick }) {
   return (
     <>
       <div className="options">
-        <label htmlFor="type">Type:</label>
-        <select
-          id="type"
-          name="type"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <option value="line">Line</option>
+        <div className="type-chart">
+          <label htmlFor="type">Chart type: </label>
+          <select
+            id="type"
+            name="type"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
           <option value="bar">Bar</option>
-        </select>
-
-        <div className='date-filter'>
-          <label htmlFor="start-date">Start Date:</label>
-          <input
-            type="datetime-local" 
-            id="start-date"
-            value={startDate}
-            onChange={(e) => handleDateChange('start', e.target.value)}
-          />
-          <label htmlFor="end-date">End Date:</label>
-          <input
-            type="datetime-local"
-            id="end-date"
-            value={endDate}
-            onChange={(e) => handleDateChange('end', e.target.value)}
-          />
-          <button onClick={() => handleFilterClick(startDate, endDate, label)}>Filter</button>
+          <option value="line">Line</option>
+          </select>
         </div>
+          
+        <div className="date-filter">
+          <div className="dates">
+            <label htmlFor="start-date">Start Date: </label>
+            <input
+              type="datetime-local"
+              id="start-date"
+              value={startDate}
+              onChange={(e) => handleDateChange("start", e.target.value)}
+            />
+            <label htmlFor="end-date">End Date: </label>
+            <input
+              type="datetime-local"
+              id="end-date"
+              value={endDate}
+              onChange={(e) => handleDateChange("end", e.target.value)}
+            />          
+          </div>
+          <div className="filter-button">
+            <button onClick={() => handleFilterClick(startDate, endDate, label)}>
+              Filter
+            </button>
+          </div>
+        </div>
+        
       </div>
 
       <ChartComponent data={data} options={options} chartType={type} />
