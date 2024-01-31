@@ -7,6 +7,9 @@ import { format } from "date-fns";
 import "../../../styles/stats.css";
 
 function StatsMain() {
+  // Main page of apps statistics, contains checkboxes to choose what kind
+  // of statistic or dataset you want
+
   const [data, setData] = useState({});
   const [initialStartDate, setInitialStartDate] = useState("");
   const [initialEndDate, setInitialEndDate] = useState("");
