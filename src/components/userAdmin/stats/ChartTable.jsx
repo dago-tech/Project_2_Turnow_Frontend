@@ -10,6 +10,7 @@ function ChartTable({
   error,
   loading,
 }) {
+  // Renders a group of charts, treir errors and loading animation
 
   return (
     <>

@@ -1,4 +1,5 @@
 import "../../styles/main.css";
+import "../../styles/userAdmin.css"
 
 export function AdminHome() {
   /*Home message in admin nain page*/

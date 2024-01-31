@@ -1,4 +1,5 @@
 import ItemsCrud from "../../dataTable/ItemsCrud";
+import "../../../styles/userAdmin.css"
 
 export function ClientList() {
   /* Shows a list of created and stored clients */

@@ -1,0 +1,15 @@
+.admin-container {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: center;
+}
+
+.admin-content-container {
+  margin-right: 5vw;
+}

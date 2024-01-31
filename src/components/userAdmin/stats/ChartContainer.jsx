@@ -8,12 +8,14 @@ function ChartContainer({
   initialStartDate,
   initialEndDate,
 }) {
+  // Renders a container with a chart, a type select and a date filter
+
   const [type, setType] = useState("bar");
   const [startDate, setStartDate] = useState(initialStartDate);
   const [endDate, setEndDate] = useState(initialEndDate);
 
   const handleDateChange = (dateType, value) => {
-    // Función para manejar cambios en la fecha y hora
+    // Handle changes in date input
     if (dateType === "start") {
       setStartDate(value);
     } else if (dateType === "end") {
@@ -60,6 +62,7 @@ function ChartContainer({
   return (
     <>
       <div className="options">
+        {/* Select for type chart */}
         <div className="type-chart">
           <label htmlFor="type">Chart type: </label>
           <select
@@ -72,7 +75,7 @@ function ChartContainer({
           <option value="line">Line</option>
           </select>
         </div>
-          
+        {/* Start and end dates inputs */}
         <div className="date-filter">
           <div className="dates">
             <label htmlFor="start-date">Start Date: </label>

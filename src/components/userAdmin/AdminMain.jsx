@@ -15,16 +15,17 @@ import { UserCreateEdit } from "./user/UserCreateEdit";
 import { TurnCreateEdit } from "./turn/TurnCreateEdit";
 import BackButton from "../BackButton";
 import StatsMain from "./stats/StatsMain";
+import "../../styles/userAdmin.css"
 
 export function AdminMain() {
   /* Shows the admin main page, an admin user will be able to create and edit registers of
     categories, priorities, users and turns */
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ flex: 1, textAlign: "center" }}>
-        <h2>Admin menu</h2>
-        <nav className="left-menu">
+    <div className="admin-container">
+      <div className="admin-menu">
+        <h3>Admin menu</h3>
+        <aside className="left-menu">
           <ul>
             <li>
               <Link to="/home">Home</Link>
@@ -59,11 +60,9 @@ export function AdminMain() {
               <Link to="/logout">Logout</Link>
             </li>
           </ul>
-        </nav>
+        </aside>
       </div>
-      {/* flex: 1 and flex: 5 means total width will be divided into 6 sections */}
-      {/* 1vw viewport width represents 1% of browser width */}
-      <div style={{ flex: 5, marginRight: "5vw" }}>
+      <div className="admin-content-container">
         <BackButton />
         <Routes>
           <Route path="/" element={<AdminHome />} />
